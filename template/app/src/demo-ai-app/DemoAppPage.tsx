@@ -10,8 +10,18 @@ import {
 } from "wasp/client/operations";
 import { Link, routes } from "wasp/client/router";
 
-import { ArrowRight, Loader2, Trash2 } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarClock,
+  ListTodo,
+  Loader2,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
+import { EmptyState } from "../client/components/layout/EmptyState";
+import { PageHeader } from "../client/components/layout/PageHeader";
+import { Badge } from "../client/components/ui/badge";
 import { Button } from "../client/components/ui/button";
 import {
   Card,
@@ -21,6 +31,7 @@ import {
 } from "../client/components/ui/card";
 import { Checkbox } from "../client/components/ui/checkbox";
 import { Input } from "../client/components/ui/input";
+import { Skeleton } from "../client/components/ui/skeleton";
 import { Label } from "../client/components/ui/label";
 import { ToastAction } from "../client/components/ui/toast";
 import { toast } from "../client/hooks/use-toast";
@@ -34,31 +45,17 @@ import type {
 
 export function DemoAppPage() {
   return (
-    <div className="py-10 lg:mt-10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-foreground mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            <span className="text-primary">AI</span> Day Scheduler
-          </h2>
-        </div>
-        <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-center text-lg leading-8">
-          This example app uses OpenAI's chat completions with function calling
-          to return a structured JSON object. Try it out, enter your day's
-          tasks, and let AI do the rest!
-        </p>
-        {/* begin AI-powered Todo List */}
-        <Card className="bg-muted/10 my-8">
-          <CardContent className="mx-auto my-8 space-y-10 px-6 py-10 sm:w-[90%] md:w-[70%] lg:w-[50%]">
-            <NewTaskForm handleCreateTask={createTask} />
-          </CardContent>
-        </Card>
-        {/* end AI-powered Todo List */}
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="AI Scheduler"
+        description="Add the tasks you want to get done today, tell us how many hours you have, and let AI turn them into a prioritized schedule."
+      />
+      <Planner handleCreateTask={createTask} />
     </div>
   );
 }
 
-function NewTaskForm({
+function Planner({
   handleCreateTask,
 }: {
   handleCreateTask: typeof createTask;
@@ -140,7 +137,11 @@ function NewTaskForm({
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";
-      window.alert("Error: " + message);
+      toast({
+        title: "Could not add task",
+        description: message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -188,105 +189,139 @@ function NewTaskForm({
     }
   };
 
+  const hasTasks = !!tasks && tasks.length > 0;
+
   return (
-    <div className="flex flex-col justify-center gap-10">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <Input
-            type="text"
-            id="description"
-            className="flex-1"
-            placeholder="Enter task description"
-            value={description}
-            onChange={(e) => setDescription(e.currentTarget.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit();
-              }
-            }}
-          />
-          <Button
-            type="button"
-            onClick={handleSubmit}
-            disabled={!description}
-            variant="default"
-            size="default"
-          >
-            Add Task
-          </Button>
-        </div>
-      </div>
+    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+      <Card>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base">Today's tasks</CardTitle>
+          <p className="text-muted-foreground text-sm">
+            Add a task and estimate how long it takes.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              id="description"
+              className="flex-1"
+              placeholder="e.g. Prepare the Q3 roadmap review"
+              aria-label="Task description"
+              value={description}
+              onChange={(e) => setDescription(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
+            />
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              disabled={!description}
+            >
+              Add task
+            </Button>
+          </div>
 
-      <div className="col-span-full space-y-10">
-        {isTasksLoading && (
-          <div className="text-muted-foreground">Loading...</div>
-        )}
-        {tasks! && tasks.length > 0 ? (
-          <div className="space-y-4">
-            {tasks.map((task: Task) => (
-              <Todo
-                key={task.id}
-                id={task.id}
-                isDone={task.isDone}
-                description={task.description}
-                time={task.time}
-              />
-            ))}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-3">
-                <Label
-                  htmlFor="time"
-                  className="text-muted-foreground text-nowrap text-sm font-semibold"
-                >
-                  How many hours will you work today?
-                </Label>
-                <Input
-                  type="number"
-                  id="time"
-                  step={0.5}
-                  min={1}
-                  max={24}
-                  className="min-w-28 text-center"
-                  value={todaysHours}
-                  onChange={(e) => setTodaysHours(+e.currentTarget.value)}
-                />
-              </div>
+          {isTasksLoading ? (
+            <div className="space-y-2" role="status" aria-label="Loading tasks">
+              <Skeleton className="h-12" />
+              <Skeleton className="h-12" />
+              <Skeleton className="h-12" />
             </div>
+          ) : hasTasks ? (
+            <ul className="space-y-2">
+              {tasks.map((task: Task) => (
+                <Todo
+                  key={task.id}
+                  id={task.id}
+                  isDone={task.isDone}
+                  description={task.description}
+                  time={task.time}
+                />
+              ))}
+            </ul>
+          ) : (
+            <EmptyState
+              icon={ListTodo}
+              title="No tasks yet"
+              description="Add your first task above to begin building today's plan."
+            />
+          )}
+
+          <div className="border-border space-y-4 border-t pt-5">
+            <div className="flex items-center justify-between gap-3">
+              <Label
+                htmlFor="time"
+                className="text-muted-foreground text-sm font-medium"
+              >
+                Hours available today
+              </Label>
+              <Input
+                type="number"
+                id="time"
+                step={0.5}
+                min={1}
+                max={24}
+                className="w-24 text-center"
+                value={todaysHours}
+                onChange={(e) => setTodaysHours(+e.currentTarget.value)}
+              />
+            </div>
+            <Button
+              type="button"
+              disabled={isPlanGenerating || tasks?.length === 0}
+              onClick={() => handleGeneratePlan()}
+              size="lg"
+              className="w-full"
+              data-testid="generate-schedule-button"
+            >
+              {isPlanGenerating ? (
+                <>
+                  <Loader2 className="animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Sparkles />
+                  Generate schedule
+                </>
+              )}
+            </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-foreground text-base font-semibold">
+            Today's schedule
+          </h2>
+          {response && (
+            <Badge variant="outline">{response.tasks?.length ?? 0} tasks</Badge>
+          )}
+        </div>
+        {isPlanGenerating ? (
+          <div
+            className="space-y-3"
+            role="status"
+            aria-label="Generating schedule"
+          >
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+          </div>
+        ) : response ? (
+          <Schedule schedule={response} />
         ) : (
-          <div className="text-muted-foreground text-center">
-            Add tasks to begin
-          </div>
+          <EmptyState
+            icon={CalendarClock}
+            title="No schedule yet"
+            description="Generate a schedule and it will appear here."
+          />
         )}
       </div>
-
-      <Button
-        type="button"
-        disabled={isPlanGenerating || tasks?.length === 0}
-        onClick={() => handleGeneratePlan()}
-        variant="default"
-        size="default"
-        className="w-full"
-        data-testid="generate-schedule-button"
-      >
-        {isPlanGenerating ? (
-          <>
-            <Loader2 className="mr-2 inline-block animate-spin" />
-            Generating...
-          </>
-        ) : (
-          "Generate Schedule"
-        )}
-      </Button>
-
-      {!!response && (
-        <div className="flex flex-col">
-          <h3 className="text-foreground mb-4 text-lg font-semibold">
-            Today's Schedule
-          </h3>
-          <Schedule schedule={response} />
-        </div>
-      )}
     </div>
   );
 }
@@ -313,64 +348,52 @@ function Todo({ id, isDone, description, time }: TodoProps) {
   };
 
   return (
-    <Card className="p-4">
-      <div className="flex w-full items-center justify-between">
-        <div className="flex w-full items-center justify-between gap-5">
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={isDone}
-              onCheckedChange={handleCheckboxChange}
-              className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-            />
-            <span
-              className={cn("text-foreground", {
-                "text-muted-foreground line-through": isDone,
-              })}
-            >
-              {description}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Input
-              id="time"
-              type="number"
-              min={0.5}
-              step={0.5}
-              className={cn("w-18 h-8 text-center text-xs", {
-                "pointer-events-none opacity-50": isDone,
-              })}
-              value={time}
-              onChange={handleTimeChange}
-            />
-            <span
-              className={cn("text-muted-foreground text-xs italic", {
-                "text-muted-foreground": isDone,
-              })}
-            >
-              hrs
-            </span>
-          </div>
-        </div>
-        <div className="w-15 flex items-center justify-end">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDeleteClick}
-            title="Remove task"
-            className="text-destructive hover:text-destructive/80 h-auto p-1"
-          >
-            <Trash2 size="20" />
-          </Button>
-        </div>
+    <li className="border-border bg-background hover:border-foreground/20 flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors">
+      <Checkbox
+        checked={isDone}
+        onCheckedChange={handleCheckboxChange}
+        aria-label={`Mark "${description}" as done`}
+        className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+      />
+      <span
+        className={cn("text-foreground min-w-0 flex-1 truncate text-sm", {
+          "text-muted-foreground line-through": isDone,
+        })}
+      >
+        {description}
+      </span>
+      <div className="flex items-center gap-1.5">
+        <Input
+          type="number"
+          min={0.5}
+          step={0.5}
+          aria-label="Hours"
+          className={cn("h-8 w-16 px-2 text-center text-xs", {
+            "pointer-events-none opacity-50": isDone,
+          })}
+          value={time}
+          onChange={handleTimeChange}
+        />
+        <span className="text-muted-foreground text-xs">hrs</span>
       </div>
-    </Card>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleDeleteClick}
+        title="Remove task"
+        aria-label="Remove task"
+        className="hover:text-destructive size-8"
+      >
+        <Trash2 />
+      </Button>
+    </li>
   );
 }
 
 function Schedule({ schedule }: { schedule: GeneratedSchedule }) {
   return (
-    <div className="flex flex-col gap-6 py-6" data-testid="schedule">
-      <div className="space-y-4">
+    <div data-testid="schedule">
+      <div className="space-y-3">
         {schedule.tasks ? (
           schedule.tasks
             .map((task) => (
@@ -408,26 +431,25 @@ function TaskCard({
   task: ScheduleTask;
   taskItems: TaskItem[];
 }) {
-  const taskPriorityToColorMap: Record<TaskPriority, string> = {
-    high: "bg-destructive/10 border-destructive/20 text-red-500",
-    medium: "bg-warning/10 border-warning/20 text-warning",
-    low: "bg-success/10 border-success/20 text-success",
-  };
+  const taskPriorityToBadgeVariant = {
+    high: "destructive",
+    medium: "warning",
+    low: "success",
+  } as const;
 
   return (
-    <Card className={cn("border-2", taskPriorityToColorMap[task.priority])}>
+    <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between text-base">
-          <span>{task.name}</span>
-          <span className="text-xs font-medium italic">
-            {" "}
+        <CardTitle className="flex items-center justify-between gap-3 text-sm">
+          <span className="truncate">{task.name}</span>
+          <Badge variant={taskPriorityToBadgeVariant[task.priority]}>
             {task.priority} priority
-          </span>
+          </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
+      <CardContent>
         {taskItems ? (
-          <ul className="space-y-2">
+          <ul className="divide-border divide-y">
             {taskItems.map((taskItem) => {
               if (taskItem.taskName === task.name) {
                 return (
@@ -467,7 +489,7 @@ function TaskCardItem({ description, time }: TaskItem) {
   };
 
   return (
-    <li className="flex items-center justify-between gap-4 rounded-md p-2">
+    <li className="flex items-center justify-between gap-4 py-2.5">
       <div className="flex flex-1 items-center gap-3">
         <Checkbox
           checked={isDone}
@@ -483,7 +505,7 @@ function TaskCardItem({ description, time }: TaskItem) {
         </span>
       </div>
       <span
-        className={cn("text-muted-foreground text-sm", {
+        className={cn("text-muted-foreground text-xs tabular-nums", {
           "line-through opacity-50": isDone,
         })}
       >

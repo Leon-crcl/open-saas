@@ -15,15 +15,15 @@ export function TotalSignupsCard({ dailyStats, isLoading }: DailyStatsProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="bg-muted h-11.5 w-11.5 flex items-center justify-center rounded-full">
-          <UsersRound className="size-6" />
+      <CardHeader className="pb-3">
+        <div className="bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-md">
+          <UsersRound className="size-4" aria-hidden="true" />
         </div>
       </CardHeader>
 
-      <CardContent className="flex justify-between">
+      <CardContent className="flex items-end justify-between">
         <div>
-          <h4 className="text-title-md text-foreground font-bold">
+          <h4 className="text-foreground text-2xl font-semibold tracking-tight tabular-nums">
             {dailyStats?.userCount}
           </h4>
           <span className="text-muted-foreground text-sm font-medium">
@@ -39,8 +39,10 @@ export function TotalSignupsCard({ dailyStats, isLoading }: DailyStatsProps) {
             "text-muted-foreground": isLoading || !dailyStats?.userDelta,
           })}
         >
-          {isLoading ? "..." : (dailyStats?.userDelta ?? "-")}
-          {!isLoading && (dailyStats?.userDelta ?? 0) > 0 && <ArrowUp />}
+          {isLoading ? "..." : dailyStats?.userDelta ?? "-"}
+          {!isLoading && (dailyStats?.userDelta ?? 0) > 0 && (
+            <ArrowUp className="size-4" />
+          )}
         </span>
       </CardContent>
     </Card>

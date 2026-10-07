@@ -1,7 +1,11 @@
 export function LoadingSpinner() {
   return (
-    <div className="flex items-center justify-center py-10">
-      <div className="border-primary h-16 w-16 animate-spin rounded-full border-4 border-solid border-t-transparent"></div>
+    <div
+      className="flex items-center justify-center py-16"
+      role="status"
+      aria-label="Loading"
+    >
+      <div className="border-muted border-t-foreground size-7 animate-spin rounded-full border-2" />
     </div>
   );
 }

@@ -3,20 +3,17 @@ import * as React from "react";
 
 import { cn } from "../../utils";
 
-const cardVariants = cva(
-  "rounded-xl border shadow hover:shadow-lg transition-all duration-300",
-  {
-    variants: {
-      variant: {
-        default: "bg-card text-card-foreground",
-        accent: "bg-card-accent text-card-accent-foreground hover:scale-[1.02]",
-        faded: "text-card-faded-foreground scale-95 opacity-50",
-        bento:
-          "bg-card-subtle text-card-subtle-foreground hover:scale-[1.02] border-none shadow-none",
-      },
+const cardVariants = cva("rounded-lg border shadow-xs", {
+  variants: {
+    variant: {
+      default: "bg-card text-card-foreground",
+      accent: "bg-card-accent text-card-accent-foreground",
+      faded: "text-card-faded-foreground opacity-60",
+      bento:
+        "bg-card-subtle text-card-subtle-foreground border-transparent shadow-none",
     },
   },
-);
+});
 
 function Card({
   className,
@@ -36,7 +33,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-header"
-      className={cn("flex flex-col space-y-1.5 p-6", className)}
+      className={cn("flex flex-col space-y-1.5 p-5 sm:p-6", className)}
       {...props}
     />
   );
@@ -66,7 +63,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-content"
-      className={cn("p-6 pt-0", className)}
+      className={cn("p-5 pt-0 sm:p-6 sm:pt-0", className)}
       {...props}
     />
   );
@@ -76,7 +73,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center p-6 pt-0", className)}
+      className={cn("flex items-center p-5 pt-0 sm:p-6 sm:pt-0", className)}
       {...props}
     />
   );

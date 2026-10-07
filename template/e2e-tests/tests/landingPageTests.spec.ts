@@ -6,11 +6,14 @@ test.describe("general landing page tests", () => {
   });
 
   test("has title", async ({ page }) => {
-    await expect(page).toHaveTitle(/SaaS/);
+    await expect(page).toHaveTitle(/Cadence/);
   });
 
   test("get started link", async ({ page }) => {
-    await page.getByRole("link", { name: "Get started" }).click();
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Get started" })
+      .click();
     await page.waitForURL("**/signup");
   });
 
@@ -19,7 +22,9 @@ test.describe("general landing page tests", () => {
       page.getByRole("heading", { name: "Frequently asked questions" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Some cool words" }),
+      page.getByRole("heading", {
+        name: "Turn your to-do list into a day that actually works.",
+      }),
     ).toBeVisible();
   });
 });

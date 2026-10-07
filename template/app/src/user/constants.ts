@@ -3,21 +3,21 @@ import { routes } from "wasp/client/router";
 
 export const userMenuItems = [
   {
-    name: "AI Scheduler (Demo App)",
+    name: "AI Scheduler",
     to: routes.DemoAppRoute.to,
     icon: LayoutDashboard,
     isAdminOnly: false,
     isAuthRequired: true,
   },
   {
-    name: "Account Settings",
+    name: "Account settings",
     to: routes.AccountRoute.to,
     icon: Settings,
     isAuthRequired: false,
     isAdminOnly: false,
   },
   {
-    name: "Admin Dashboard",
+    name: "Admin dashboard",
     to: routes.AdminRoute.to,
     icon: Shield,
     isAuthRequired: false,

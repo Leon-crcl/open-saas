@@ -9,10 +9,18 @@ import {
 } from "wasp/client/operations";
 import type { File } from "wasp/entities";
 
-import { Download, Trash } from "lucide-react";
+import { Download, FileText, Trash2, UploadCloud } from "lucide-react";
 import { Alert, AlertDescription } from "../client/components/ui/alert";
 import { Button } from "../client/components/ui/button";
-import { Card, CardContent, CardTitle } from "../client/components/ui/card";
+import { EmptyState } from "../client/components/layout/EmptyState";
+import { PageHeader } from "../client/components/layout/PageHeader";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../client/components/ui/card";
+import { Skeleton } from "../client/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -169,27 +177,27 @@ export function FileUploadPage() {
 
   return (
     <>
-      <div className="py-10 lg:mt-10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-foreground mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-              <span className="text-primary">AWS</span> File Upload
-            </h2>
-          </div>
-          <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-center text-lg leading-8">
-            This is an example file upload page using AWS S3. Maybe your app
-            needs this. Maybe it doesn't. But a lot of people asked for this
-            feature, so here you go 🤝
-          </p>
-          <Card className="my-8">
-            <CardContent className="mx-auto my-10 space-y-10 px-4 py-8 sm:max-w-lg">
+      <div className="space-y-8">
+        <PageHeader
+          title="File Upload"
+          description="Securely store documents in your private storage and download them whenever you need."
+        />
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)]">
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base">Upload a file</CardTitle>
+              <p className="text-muted-foreground text-sm">
+                Choose a file from your device.
+              </p>
+            </CardHeader>
+            <CardContent>
               <form onSubmit={handleUpload} className="flex flex-col gap-4">
                 <div className="space-y-2">
                   <Label
                     htmlFor="file-upload"
                     className="text-foreground text-sm font-medium"
                   >
-                    Select a file to upload
+                    Select a file
                   </Label>
                   <Input
                     type="file"
@@ -199,12 +207,13 @@ export function FileUploadPage() {
                     className="cursor-pointer"
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Button
                     type="submit"
                     disabled={uploadProgressPercent > 0}
                     className="w-full"
                   >
+                    <UploadCloud />
                     {uploadProgressPercent > 0
                       ? `Uploading ${uploadProgressPercent}%`
                       : "Upload"}
@@ -217,71 +226,86 @@ export function FileUploadPage() {
                   )}
                 </div>
               </form>
-              <div className="border-border border-b-2"></div>
-              <div className="col-span-full space-y-4">
-                <CardTitle className="text-foreground text-xl font-bold">
-                  Uploaded Files
-                </CardTitle>
-                {allUserFiles.isLoading && (
-                  <p className="text-muted-foreground">Loading...</p>
-                )}
-                {allUserFiles.error && (
-                  <Alert variant="destructive">
-                    <AlertDescription>
-                      Error: {allUserFiles.error.message}
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {!!allUserFiles.data &&
-                allUserFiles.data.length > 0 &&
-                !allUserFiles.isLoading ? (
-                  <div className="space-y-3">
-                    {allUserFiles.data.map((file: File) => (
-                      <Card key={file.s3Key} className="p-4">
-                        <div
-                          className={cn(
-                            "flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center",
-                            {
-                              "opacity-70":
-                                file.s3Key === fileKeyForS3 &&
-                                isDownloadUrlLoading,
-                            },
-                          )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base">Your files</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {allUserFiles.isLoading && (
+                <div
+                  className="space-y-2"
+                  role="status"
+                  aria-label="Loading files"
+                >
+                  <Skeleton className="h-14" />
+                  <Skeleton className="h-14" />
+                </div>
+              )}
+              {allUserFiles.error && (
+                <Alert variant="destructive">
+                  <AlertDescription>
+                    Error: {allUserFiles.error.message}
+                  </AlertDescription>
+                </Alert>
+              )}
+              {!!allUserFiles.data &&
+              allUserFiles.data.length > 0 &&
+              !allUserFiles.isLoading ? (
+                <ul className="space-y-2">
+                  {allUserFiles.data.map((file: File) => (
+                    <li
+                      key={file.s3Key}
+                      className={cn(
+                        "border-border bg-background flex items-center gap-3 rounded-lg border px-3 py-2.5",
+                        {
+                          "opacity-70":
+                            file.s3Key === fileKeyForS3 && isDownloadUrlLoading,
+                        },
+                      )}
+                    >
+                      <span className="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-md">
+                        <FileText className="size-4" aria-hidden="true" />
+                      </span>
+                      <p className="text-foreground min-w-0 flex-1 truncate text-sm font-medium">
+                        {file.name}
+                      </p>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          onClick={() => setFileKeyForS3(file.s3Key)}
+                          disabled={
+                            file.s3Key === fileKeyForS3 && isDownloadUrlLoading
+                          }
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`Download ${file.name}`}
                         >
-                          <p className="text-foreground font-medium">
-                            {file.name}
-                          </p>
-                          <div className="flex items-center justify-end gap-2">
-                            <Button
-                              onClick={() => setFileKeyForS3(file.s3Key)}
-                              disabled={
-                                file.s3Key === fileKeyForS3 &&
-                                isDownloadUrlLoading
-                              }
-                              variant="outline"
-                              size="sm"
-                            >
-                              <Download className="h-5 w-5" />
-                            </Button>
-                            <Button
-                              onClick={() => setFileToDelete(file)}
-                              variant="outline"
-                              size="sm"
-                              aria-label="Delete file"
-                            >
-                              <Trash className="text-destructive h-5 w-5" />
-                            </Button>
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground text-center">
-                    No files uploaded yet :(
-                  </p>
-                )}
-              </div>
+                          <Download />
+                        </Button>
+                        <Button
+                          onClick={() => setFileToDelete(file)}
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`Delete ${file.name}`}
+                          className="hover:text-destructive"
+                        >
+                          <Trash2 />
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                !allUserFiles.isLoading && (
+                  <EmptyState
+                    icon={FileText}
+                    title="No files yet"
+                    description="Files you upload will show up here."
+                  />
+                )
+              )}
             </CardContent>
           </Card>
         </div>

@@ -19,7 +19,7 @@ import { userSpec } from "./src/user/user.wasp";
 export default app({
   name: "OpenSaaS",
   wasp: { version: "^0.26.0" },
-  title: "My Open SaaS App",
+  title: "Cadence | The AI day planner",
   head,
   auth: authConfig,
   db: {
