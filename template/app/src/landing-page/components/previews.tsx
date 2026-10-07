@@ -1,11 +1,4 @@
-import {
-  CalendarClock,
-  Check,
-  FileText,
-  Plus,
-  Sparkles,
-  UploadCloud,
-} from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "../../client/utils";
 
@@ -48,205 +41,189 @@ export function WindowFrame({
   );
 }
 
-const priorityStyles = {
-  high: "bg-destructive/10 text-destructive",
-  medium: "bg-warning/10 text-warning",
-  low: "bg-success/10 text-success",
-} as const;
+const demoSuppliers = [
+  { name: "Northwind Components", meta: "Electronics · Germany", score: 87.4, price: "€4.20", quality: 92, days: 6, risk: 14 },
+  { name: "Lumen Industrial", meta: "Mechanical · Poland", score: 74.1, price: "€3.60", quality: 78, days: 12, risk: 31 },
+  { name: "Orbital Supply Co.", meta: "Electronics · Vietnam", score: 52.9, price: "€2.90", quality: 61, days: 28, risk: 58 },
+] as const;
 
-function PriorityPill({ level }: { level: keyof typeof priorityStyles }) {
-  return (
-    <span
-      className={cn(
-        "rounded-full px-2 py-0.5 text-[10px] font-medium capitalize",
-        priorityStyles[level],
-      )}
-    >
-      {level}
-    </span>
-  );
+function scoreTone(score: number) {
+  if (score >= 70) return { bar: "bg-success", text: "text-success" };
+  if (score >= 40) return { bar: "bg-warning", text: "text-warning" };
+  return { bar: "bg-destructive", text: "text-destructive" };
 }
 
-const tasks = [
-  { name: "Respond to customer emails", hours: "1.5 hrs", done: true },
-  { name: "Prepare Q3 roadmap review", hours: "2 hrs", done: false },
-  { name: "Write launch announcement", hours: "1 hr", done: false },
-];
-
-export function TaskListPreview({ className }: { className?: string }) {
+export function RankingPreview({ className }: { className?: string }) {
   return (
-    <div className={cn("space-y-2.5 p-4 sm:p-5", className)}>
-      <div className="flex gap-2">
-        <div className="border-input bg-background text-muted-foreground flex h-9 flex-1 items-center rounded-md border px-3 text-xs">
-          Add a task for today…
-        </div>
-        <div className="bg-primary text-primary-foreground flex h-9 items-center gap-1 rounded-md px-3 text-xs font-medium">
-          <Plus className="size-3.5" /> Add
-        </div>
+    <div className={cn("p-4 sm:p-5", className)}>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-foreground text-sm font-semibold">Ranking</p>
+        <span className="text-muted-foreground text-[11px]">3 suppliers</span>
       </div>
-      {tasks.map((task) => (
-        <div
-          key={task.name}
-          className="border-border flex items-center gap-3 rounded-lg border px-3 py-2.5"
-        >
-          <span
-            className={cn(
-              "flex size-4 shrink-0 items-center justify-center rounded-[4px] border",
-              task.done
-                ? "bg-primary border-primary text-primary-foreground"
-                : "border-input",
-            )}
-          >
-            {task.done && <Check className="size-3" />}
-          </span>
-          <span
-            className={cn(
-              "flex-1 truncate text-xs",
-              task.done && "text-muted-foreground line-through",
-            )}
-          >
-            {task.name}
-          </span>
-          <span className="text-muted-foreground border-input rounded-md border px-2 py-0.5 text-[11px] tabular-nums">
-            {task.hours}
-          </span>
-        </div>
-      ))}
-      <div className="bg-primary text-primary-foreground flex h-9 items-center justify-center gap-2 rounded-md text-xs font-medium">
-        <Sparkles className="size-3.5" /> Generate schedule
+      <div className="space-y-2.5">
+        {demoSuppliers.map((supplier, index) => {
+          const tone = scoreTone(supplier.score);
+          return (
+            <div
+              key={supplier.name}
+              className="border-border bg-background rounded-lg border p-3"
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={cn(
+                    "rounded-full border px-2 py-0.5 text-[10px] font-medium tabular-nums",
+                    index === 0
+                      ? "border-brand/20 bg-brand-subtle text-brand"
+                      : "border-border bg-muted text-muted-foreground",
+                  )}
+                >
+                  #{index + 1}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold">{supplier.name}</p>
+                  <p className="text-muted-foreground truncate text-[10px]">
+                    {supplier.meta}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-2.5 flex items-center gap-2.5">
+                <div className="bg-muted h-1.5 flex-1 overflow-hidden rounded-full">
+                  <div
+                    className={cn("h-full rounded-full", tone.bar)}
+                    style={{ width: `${supplier.score}%` }}
+                  />
+                </div>
+                <span className={cn("text-xs font-semibold tabular-nums", tone.text)}>
+                  {supplier.score.toFixed(1)}
+                </span>
+              </div>
+              <div className="text-muted-foreground mt-2.5 grid grid-cols-4 gap-2 text-[10px] tabular-nums">
+                <span>{supplier.price}</span>
+                <span>Q {supplier.quality}</span>
+                <span>{supplier.days} days</span>
+                <span>Risk {supplier.risk}</span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-const schedule = [
-  {
-    time: "09:00",
-    title: "Respond to customer emails",
-    priority: "high" as const,
-    steps: [
-      ["Triage the inbox", "30 min"],
-      ["Reply to urgent threads", "1 hr"],
-    ],
-  },
-  {
-    time: "10:30",
-    title: "Prepare Q3 roadmap review",
-    priority: "medium" as const,
-    steps: [
-      ["Collect metrics from last quarter", "45 min"],
-      ["Draft the narrative and slides", "1 hr 15 min"],
-    ],
-  },
-  {
-    time: "13:00",
-    title: "Write launch announcement",
-    priority: "low" as const,
-    steps: [["First draft and review", "1 hr"]],
-  },
-];
+const demoWeights = [
+  ["Price", 35],
+  ["Quality", 30],
+  ["Delivery time", 20],
+  ["Risk", 15],
+] as const;
 
-export function SchedulePreview({ className }: { className?: string }) {
+export function WeightsPreview({ className }: { className?: string }) {
   return (
-    <div className={cn("p-4 sm:p-5", className)}>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-foreground text-sm font-semibold">
-          Today&apos;s schedule
-        </p>
-        <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
-          <CalendarClock className="size-3.5" /> 8 hrs planned
-        </span>
+    <div className={cn("space-y-5 p-4 sm:p-5", className)}>
+      <p className="text-foreground text-sm font-semibold">Scoring weights</p>
+      {demoWeights.map(([label, value]) => (
+        <div key={label} className="space-y-2">
+          <div className="flex items-baseline justify-between text-xs">
+            <span className="font-medium">{label}</span>
+            <span className="font-semibold tabular-nums">{value}%</span>
+          </div>
+          <div className="bg-muted relative h-1.5 rounded-full">
+            <div
+              className="bg-brand h-full rounded-full"
+              style={{ width: `${value * 2}%` }}
+            />
+            <span
+              className="border-brand bg-background absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 shadow-sm"
+              style={{ left: `${value * 2}%` }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function SupplierFormPreview({ className }: { className?: string }) {
+  const fields = [
+    ["Price per unit", "€ 4.20"],
+    ["Delivery time", "6 days"],
+    ["Quality", "92"],
+    ["Risk", "14"],
+  ];
+  return (
+    <div className={cn("space-y-4 p-4 sm:p-5", className)}>
+      <p className="text-foreground text-sm font-semibold">Add supplier</p>
+      <div className="space-y-1.5">
+        <p className="text-xs font-medium">Supplier name</p>
+        <div className="border-input bg-background flex h-9 items-center rounded-md border px-3 text-xs">
+          Northwind Components
+        </div>
       </div>
-      <div className="relative space-y-3">
-        <div className="bg-border absolute bottom-2 left-[46px] top-2 w-px" />
-        {schedule.map((block) => (
-          <div key={block.title} className="relative flex gap-3">
-            <span className="text-muted-foreground w-10 shrink-0 pt-3 text-[11px] tabular-nums">
-              {block.time}
-            </span>
-            <span className="bg-background border-brand absolute left-[42px] top-[18px] size-2 rounded-full border-2" />
-            <div className="border-border bg-background ml-3 flex-1 rounded-lg border p-3">
-              <div className="flex items-center justify-between gap-2">
-                <p className="truncate text-xs font-medium">{block.title}</p>
-                <PriorityPill level={block.priority} />
-              </div>
-              <ul className="mt-2 space-y-1.5">
-                {block.steps.map(([step, duration]) => (
-                  <li
-                    key={step}
-                    className="text-muted-foreground flex items-center justify-between gap-2 text-[11px]"
-                  >
-                    <span className="truncate">{step}</span>
-                    <span className="tabular-nums">{duration}</span>
-                  </li>
-                ))}
-              </ul>
+      <div className="grid grid-cols-2 gap-3">
+        {fields.map(([label, value]) => (
+          <div key={label} className="space-y-1.5">
+            <p className="text-xs font-medium">{label}</p>
+            <div className="border-input bg-background flex h-9 items-center rounded-md border px-3 text-xs tabular-nums">
+              {value}
             </div>
           </div>
         ))}
       </div>
+      <div className="bg-primary text-primary-foreground flex h-9 items-center justify-center gap-1.5 rounded-md text-xs font-medium">
+        <Plus className="size-3.5" /> Save supplier
+      </div>
     </div>
   );
 }
 
-export function FilesPreview({ className }: { className?: string }) {
-  const files = [
-    ["Q3-roadmap.pdf", "2.4 MB"],
-    ["brand-guidelines.pdf", "5.1 MB"],
-    ["meeting-notes.txt", "12 KB"],
+export function ComparisonPreview({ className }: { className?: string }) {
+  const rows: [string, (string | number)[], number][] = [
+    ["Price per unit", ["€4.20", "€3.60", "€2.90"], 2],
+    ["Quality", ["92/100", "78/100", "61/100"], 0],
+    ["Delivery time", ["6 days", "12 days", "28 days"], 0],
+    ["Risk", ["14/100", "31/100", "58/100"], 0],
+    ["Total score", ["87.4", "74.1", "52.9"], 0],
   ];
+  const names = ["Northwind", "Lumen", "Orbital"];
   return (
-    <div className={cn("space-y-3 p-4 sm:p-5", className)}>
-      <div className="border-input text-muted-foreground flex flex-col items-center gap-1.5 rounded-lg border border-dashed py-6 text-xs">
-        <UploadCloud className="size-5" />
-        <span>
-          <span className="text-foreground font-medium">Click to upload</span>{" "}
-          or drag and drop
-        </span>
-      </div>
-      {files.map(([name, size]) => (
-        <div
-          key={name}
-          className="border-border flex items-center gap-3 rounded-lg border px-3 py-2.5"
-        >
-          <span className="bg-muted text-muted-foreground flex size-8 items-center justify-center rounded-md">
-            <FileText className="size-4" />
-          </span>
-          <span className="flex-1 truncate text-xs font-medium">{name}</span>
-          <span className="text-muted-foreground text-[11px]">{size}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function UsagePreview({ className }: { className?: string }) {
-  return (
-    <div className={cn("space-y-4 p-4 sm:p-5", className)}>
-      <div className="border-border rounded-lg border p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium">Pro plan</p>
-          <span className="bg-success/10 text-success rounded-full px-2 py-0.5 text-[10px] font-medium">
-            Active
-          </span>
-        </div>
-        <p className="mt-3 text-2xl font-semibold tracking-tight">
-          $19.99
-          <span className="text-muted-foreground text-xs font-normal">
-            {" "}
-            / month
-          </span>
-        </p>
-      </div>
-      <div className="border-border rounded-lg border p-4">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-medium">Credits</span>
-          <span className="text-muted-foreground tabular-nums">7 of 10</span>
-        </div>
-        <div className="bg-muted mt-3 h-1.5 overflow-hidden rounded-full">
-          <div className="bg-brand h-full w-[70%] rounded-full" />
-        </div>
-      </div>
+    <div className={cn("p-4 sm:p-5", className)}>
+      <p className="text-foreground mb-3 text-sm font-semibold">Comparison</p>
+      <table className="w-full text-[11px]">
+        <thead>
+          <tr className="border-border border-b">
+            <th className="py-2" />
+            {names.map((name) => (
+              <th key={name} className="py-2 pr-2 text-left font-semibold">
+                {name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([label, values, bestIndex]) => (
+            <tr key={label} className="border-border border-b last:border-b-0">
+              <th className="text-muted-foreground py-2.5 pr-2 text-left font-medium">
+                {label}
+              </th>
+              {values.map((value, index) => (
+                <td
+                  key={index}
+                  className={cn(
+                    "py-2.5 pr-2 tabular-nums",
+                    index === bestIndex && "text-success font-semibold",
+                  )}
+                >
+                  <span className="inline-flex items-center gap-1">
+                    {value}
+                    {index === bestIndex && <Check className="size-3" />}
+                  </span>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

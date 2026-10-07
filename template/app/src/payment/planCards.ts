@@ -13,33 +13,32 @@ export const paymentPlanCards: Record<PaymentPlanId, PaymentPlanCard> = {
   [PaymentPlanId.Hobby]: {
     name: prettyPaymentPlanName(PaymentPlanId.Hobby),
     price: "$9.99",
-    description: "For individuals getting started with AI planning.",
+    description: "For individuals and small teams comparing suppliers.",
     features: [
-      "Limited monthly schedule generations",
-      "File uploads",
-      "Light and dark themes",
+      "Up to 25 suppliers",
+      "Custom scoring weights",
+      "Side-by-side comparison",
+      "Document storage",
       "Email support",
     ],
   },
   [PaymentPlanId.Pro]: {
     name: prettyPaymentPlanName(PaymentPlanId.Pro),
     price: "$19.99",
-    description: "For people who plan every day and want no limits.",
+    description: "For procurement teams that evaluate suppliers every day.",
     features: [
-      "Unlimited monthly schedule generations",
-      "File uploads",
+      "Up to 500 suppliers",
+      "Custom scoring weights",
+      "Side-by-side comparison",
+      "Document storage",
       "Priority customer support",
-      "Early access to new features",
     ],
   },
   [PaymentPlanId.Credits10]: {
     name: prettyPaymentPlanName(PaymentPlanId.Credits10),
     price: "$9.99",
-    description: "Pay as you go. Top up whenever you need more.",
-    features: [
-      "10 schedule generations",
-      "No subscription required",
-      "Credits never expire",
-    ],
+    // Not offered in the UI yet. Reserved for pay-per-use features such as AI reports.
+    description: "One-time credit pack.",
+    features: ["10 credits", "No subscription required", "Credits never expire"],
   },
 };

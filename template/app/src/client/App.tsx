@@ -10,7 +10,7 @@ import { CookieConsentBanner } from "./components/cookie-consent/Banner";
 import { useColorMode } from "./hooks/useColorMode";
 
 const appAreaRoutes = [
-  routes.DemoAppRoute.to,
+  routes.SupplierAnalyzerRoute.to,
   routes.FileUploadRoute.to,
   routes.AccountRoute.to,
 ];

@@ -12,7 +12,11 @@ import { Alert, AlertDescription } from "../client/components/ui/alert";
 import { Button } from "../client/components/ui/button";
 import { cn } from "../client/utils";
 import { PlanCard } from "./PlanCard";
-import { PaymentPlanId, SubscriptionStatus } from "./plans";
+import {
+  SubscriptionStatus,
+  getSubscriptionPaymentPlanIds,
+  type PaymentPlanId,
+} from "./plans";
 import { recommendedPaymentPlanId } from "./planCards";
 
 export function PricingPage() {
@@ -103,8 +107,8 @@ export function PricingPage() {
           <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
-      <div className="mx-auto mt-12 grid max-w-md grid-cols-1 gap-6 sm:mt-16 lg:max-w-none lg:grid-cols-3 lg:items-start">
-        {Object.values(PaymentPlanId).map((planId) => {
+      <div className="mx-auto mt-12 grid max-w-md grid-cols-1 gap-6 sm:mt-16 lg:max-w-4xl lg:grid-cols-2 lg:items-start">
+        {getSubscriptionPaymentPlanIds().map((planId) => {
           const isRecommended = planId === recommendedPaymentPlanId;
           return (
             <PlanCard

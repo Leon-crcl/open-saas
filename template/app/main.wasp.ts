@@ -10,16 +10,16 @@ import { adminSpec } from "./src/admin/admin.wasp";
 import { analyticsSpec } from "./src/analytics/analytics.wasp";
 import { authConfig, authSpec } from "./src/auth/auth.wasp";
 import { head } from "./src/client/head.wasp";
-import { demoAiAppSpec } from "./src/demo-ai-app/demo-ai-app.wasp";
 import { fileUploadSpec } from "./src/file-upload/file-upload.wasp";
 import { paymentSpec } from "./src/payment/payment.wasp";
 import { emailSender } from "./src/server/emailSender.wasp";
+import { supplierAnalyzerSpec } from "./src/supplier-analyzer/supplier-analyzer.wasp";
 import { userSpec } from "./src/user/user.wasp";
 
 export default app({
   name: "OpenSaaS",
   wasp: { version: "^0.26.0" },
-  title: "Cadence | The AI day planner",
+  title: "Supplyr | Supplier Analyzer",
   head,
   auth: authConfig,
   db: {
@@ -43,7 +43,7 @@ export default app({
     route("NotFoundRoute", "*", page(NotFoundPage)),
     authSpec,
     userSpec,
-    demoAiAppSpec,
+    supplierAnalyzerSpec,
     paymentSpec,
     fileUploadSpec,
     analyticsSpec,

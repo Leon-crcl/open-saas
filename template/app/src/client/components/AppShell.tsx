@@ -1,8 +1,8 @@
 import {
-  CalendarClock,
   CreditCard,
   FileUp,
   Menu,
+  Scale,
   Settings,
   Shield,
   type LucideIcon,
@@ -10,13 +10,15 @@ import {
 import { useState, type ReactNode } from "react";
 import { useAuth } from "wasp/client/auth";
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
-import type { User } from "wasp/entities";
+import { getSupplierWorkspace, useQuery } from "wasp/client/operations";
 import { NavLink } from "react-router";
+import { MAX_SUPPLIER_LIMIT } from "../../supplier-analyzer/limits";
 import { UserDropdown } from "../../user/UserDropdown";
 import { cn } from "../utils";
 import { DarkModeSwitcher } from "./DarkModeSwitcher";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
+import { Progress } from "./ui/progress";
 import {
   Sheet,
   SheetContent,
@@ -33,8 +35,12 @@ interface AppNavItem {
 }
 
 const appNavItems: AppNavItem[] = [
-  { name: "AI Scheduler", to: routes.DemoAppRoute.to, icon: CalendarClock },
-  { name: "File Upload", to: routes.FileUploadRoute.to, icon: FileUp },
+  {
+    name: "Supplier Analyzer",
+    to: routes.SupplierAnalyzerRoute.to,
+    icon: Scale,
+  },
+  { name: "Documents", to: routes.FileUploadRoute.to, icon: FileUp },
   { name: "Account", to: routes.AccountRoute.to, icon: Settings },
   { name: "Plans & billing", to: routes.PricingPageRoute.to, icon: CreditCard },
   { name: "Admin", to: routes.AdminRoute.to, icon: Shield, adminOnly: true },
@@ -76,7 +82,7 @@ function MobileTopBar() {
           <SidebarContent onNavigate={() => setOpen(false)} />
         </SheetContent>
       </Sheet>
-      <WaspRouterLink to={routes.DemoAppRoute.to} aria-label="Home">
+      <WaspRouterLink to={routes.SupplierAnalyzerRoute.to} aria-label="Home">
         <Logo />
       </WaspRouterLink>
       <div className="flex w-9 justify-end">
@@ -131,7 +137,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       <div className="border-border space-y-3 border-t p-3">
-        {user && <CreditsCard credits={user.credits} onNavigate={onNavigate} />}
+        {user && <UsageCard onNavigate={onNavigate} />}
         <div className="flex items-center gap-1">
           <div className="min-w-0 flex-1">
             {user && <UserDropdown user={user} variant="full" />}
@@ -143,30 +149,41 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-function CreditsCard({
-  credits,
-  onNavigate,
-}: {
-  credits: User["credits"];
-  onNavigate?: () => void;
-}) {
+function UsageCard({ onNavigate }: { onNavigate?: () => void }) {
+  const { data: workspace } = useQuery(getSupplierWorkspace);
+  if (!workspace) return null;
+
+  const used = workspace.suppliers.length;
+  const limit = workspace.supplierLimit;
+  const canUpgrade = limit < MAX_SUPPLIER_LIMIT;
+  const percent = Math.min(100, (used / limit) * 100);
+
   return (
     <div className="bg-muted/60 rounded-lg p-3">
       <div className="flex items-baseline justify-between">
         <span className="text-muted-foreground text-xs font-medium">
-          Credits
+          Suppliers
         </span>
         <span className="text-foreground text-sm font-semibold tabular-nums">
-          {credits}
+          {used}
+          <span className="text-muted-foreground font-normal">
+            {" "}
+            / {limit}
+          </span>
         </span>
       </div>
-      <WaspRouterLink
-        to={routes.PricingPageRoute.to}
-        onClick={onNavigate}
-        className="text-brand mt-1 inline-block text-xs font-medium hover:underline"
-      >
-        Get more credits
-      </WaspRouterLink>
+      <Progress value={percent} className="mt-2" />
+      {canUpgrade && (
+        <>
+          <WaspRouterLink
+            to={routes.PricingPageRoute.to}
+            onClick={onNavigate}
+            className="text-brand mt-2 inline-block text-xs font-medium hover:underline"
+          >
+            Upgrade for more
+          </WaspRouterLink>
+        </>
+      )}
     </div>
   );
 }

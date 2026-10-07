@@ -6,7 +6,7 @@ test.describe("general landing page tests", () => {
   });
 
   test("has title", async ({ page }) => {
-    await expect(page).toHaveTitle(/Cadence/);
+    await expect(page).toHaveTitle(/Supplyr/);
   });
 
   test("get started link", async ({ page }) => {
@@ -23,7 +23,7 @@ test.describe("general landing page tests", () => {
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
-        name: "Turn your to-do list into a day that actually works.",
+        name: "Choose the right supplier, backed by data.",
       }),
     ).toBeVisible();
   });

@@ -3,15 +3,15 @@ import { type App } from "@wasp.sh/spec";
 export const head: App["head"] = [
   "<link rel='icon' href='/favicon.ico' />",
 
-  "<meta name='description' content='Cadence turns a messy to-do list into a realistic, prioritized schedule in seconds.' />",
-  "<meta name='author' content='Cadence' />",
-  "<meta name='keywords' content='ai planner, day planner, scheduling, productivity, saas' />",
+  "<meta name='description' content='Supplyr scores your suppliers on price, quality, delivery time and risk, so you can choose with confidence.' />",
+  "<meta name='author' content='Supplyr' />",
+  "<meta name='keywords' content='supplier analysis, supplier comparison, procurement, supplier scoring, saas' />",
 
   "<meta property='og:type' content='website' />",
-  "<meta property='og:title' content='Cadence - The AI day planner' />",
-  "<meta property='og:site_name' content='Cadence - The AI day planner' />",
+  "<meta property='og:title' content='Supplyr - Supplier decisions, backed by data' />",
+  "<meta property='og:site_name' content='Supplyr - Supplier decisions, backed by data' />",
   "<meta property='og:url' content='https://your-saas-app.com' />",
-  "<meta property='og:description' content='Cadence turns a messy to-do list into a realistic, prioritized schedule in seconds.' />",
+  "<meta property='og:description' content='Supplyr scores your suppliers on price, quality, delivery time and risk, so you can choose with confidence.' />",
   "<meta property='og:image' content='https://your-saas-app.com/public-banner.webp' />",
   "<meta name='twitter:image' content='https://your-saas-app.com/public-banner.webp' />",
   "<meta name='twitter:image:width' content='800' />",

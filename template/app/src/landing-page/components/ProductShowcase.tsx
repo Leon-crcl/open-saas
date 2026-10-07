@@ -3,34 +3,32 @@ import type { ReactNode } from "react";
 import { cn } from "../../client/utils";
 import { showcase } from "../contentSections";
 import {
-  FilesPreview,
-  SchedulePreview,
-  TaskListPreview,
-  UsagePreview,
+  ComparisonPreview,
+  RankingPreview,
+  SupplierFormPreview,
+  WeightsPreview,
   WindowFrame,
 } from "./previews";
 import { Section, SectionHeading } from "./Section";
 
 const visuals: Record<(typeof showcase)[number]["id"], ReactNode> = {
-  capture: (
-    <WindowFrame title="app.cadence.com/planner">
-      <TaskListPreview />
+  collect: (
+    <WindowFrame title="app.supplyr.com/analyzer">
+      <SupplierFormPreview />
     </WindowFrame>
   ),
-  plan: (
-    <WindowFrame title="app.cadence.com/planner">
-      <SchedulePreview />
-    </WindowFrame>
-  ),
-  manage: (
-    <div className="relative">
-      <WindowFrame title="app.cadence.com/files">
-        <FilesPreview />
-      </WindowFrame>
-      <div className="border-border bg-card absolute -bottom-8 -right-3 hidden w-60 rounded-xl border shadow-lg sm:block lg:-right-8">
-        <UsagePreview />
+  weigh: (
+    <WindowFrame title="app.supplyr.com/analyzer">
+      <div className="grid sm:grid-cols-[1fr_1.3fr]">
+        <WeightsPreview className="border-border border-b sm:border-b-0 sm:border-r" />
+        <RankingPreview />
       </div>
-    </div>
+    </WindowFrame>
+  ),
+  compare: (
+    <WindowFrame title="app.supplyr.com/analyzer">
+      <ComparisonPreview />
+    </WindowFrame>
   ),
 };
 
@@ -39,7 +37,7 @@ export function ProductShowcase() {
     <Section id="how-it-works" className="bg-muted/40 border-border border-y">
       <SectionHeading
         eyebrow="How it works"
-        title="From scattered tasks to a clear day"
+        title="From scattered data to a clear decision"
         description="Three simple steps, all in one calm, fast interface."
       />
       <div className="mt-16 space-y-20 sm:mt-24 sm:space-y-32">
@@ -71,10 +69,7 @@ export function ProductShowcase() {
               </ul>
             </div>
             <div
-              className={cn(
-                "mx-auto w-full max-w-lg lg:max-w-none",
-                item.id === "manage" && "pb-8",
-              )}
+              className="mx-auto w-full max-w-lg lg:max-w-none"
             >
               {visuals[item.id]}
             </div>

@@ -1,7 +1,11 @@
-import { getCustomerPortalUrl, useQuery } from "wasp/client/operations";
+import {
+  getCustomerPortalUrl,
+  getSupplierWorkspace,
+  useQuery,
+} from "wasp/client/operations";
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
 import type { User } from "wasp/entities";
-import { Coins } from "lucide-react";
+import { Truck } from "lucide-react";
 import { PageHeader } from "../client/components/layout/PageHeader";
 import { Badge } from "../client/components/ui/badge";
 import { Button } from "../client/components/ui/button";
@@ -18,6 +22,10 @@ import {
   parsePaymentPlanId,
   prettyPaymentPlanName,
 } from "../payment/plans";
+import {
+  MAX_SUPPLIER_LIMIT,
+  getSupplierLimit,
+} from "../supplier-analyzer/limits";
 import { UserAvatar, getUserDisplayName } from "./UserDropdown";
 
 export function AccountPage({ user }: { user: User }) {
@@ -25,7 +33,7 @@ export function AccountPage({ user }: { user: User }) {
     <div className="space-y-8">
       <PageHeader
         title="Account"
-        description="Manage your profile, plan and credits."
+        description="Manage your profile and plan."
       />
 
       <Card>
@@ -72,20 +80,7 @@ export function AccountPage({ user }: { user: User }) {
               subscriptionStatus={user.subscriptionStatus}
               datePaid={user.datePaid}
             />
-            <AccountRow
-              label="Credits"
-              action={
-                <BuyMoreButton subscriptionStatus={user.subscriptionStatus} />
-              }
-            >
-              <span className="inline-flex items-center gap-2">
-                <Coins
-                  className="text-muted-foreground size-4"
-                  aria-hidden="true"
-                />
-                {user.credits} credits
-              </span>
-            </AccountRow>
+            <SupplierUsageRow user={user} />
           </dl>
         </CardContent>
       </Card>
@@ -206,21 +201,29 @@ function CustomerPortalButton() {
   );
 }
 
-function BuyMoreButton({
-  subscriptionStatus,
-}: Pick<User, "subscriptionStatus">) {
-  if (
-    subscriptionStatus === SubscriptionStatus.Active ||
-    subscriptionStatus === SubscriptionStatus.CancelAtPeriodEnd
-  ) {
-    return null;
-  }
+function SupplierUsageRow({ user }: { user: User }) {
+  const { data: workspace } = useQuery(getSupplierWorkspace);
+  const limit = getSupplierLimit(user);
+  const canUpgrade = limit < MAX_SUPPLIER_LIMIT;
 
   return (
+    <AccountRow
+      label="Suppliers"
+      action={canUpgrade ? <UpgradeButton /> : null}
+    >
+      <span className="inline-flex items-center gap-2">
+        <Truck className="text-muted-foreground size-4" aria-hidden="true" />
+        {workspace ? workspace.suppliers.length : "–"} of{" "}
+        {limit} used
+      </span>
+    </AccountRow>
+  );
+}
+
+function UpgradeButton() {
+  return (
     <Button asChild variant="outline" size="sm">
-      <WaspRouterLink to={routes.PricingPageRoute.to}>
-        Buy more credits
-      </WaspRouterLink>
+      <WaspRouterLink to={routes.PricingPageRoute.to}>Upgrade plan</WaspRouterLink>
     </Button>
   );
 }

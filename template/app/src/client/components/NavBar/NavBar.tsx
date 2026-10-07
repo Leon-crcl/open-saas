@@ -123,7 +123,7 @@ function NavBarActions() {
       ) : (
         <>
           <Button asChild>
-            <WaspRouterLink to={routes.DemoAppRoute.to}>
+            <WaspRouterLink to={routes.SupplierAnalyzerRoute.to}>
               Open app
             </WaspRouterLink>
           </Button>

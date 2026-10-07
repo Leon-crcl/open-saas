@@ -17,7 +17,7 @@ export function NotFoundPage() {
         </p>
         <Button asChild size="lg" className="mt-8">
           <WaspRouterLink
-            to={user ? routes.DemoAppRoute.to : routes.LandingPageRoute.to}
+            to={user ? routes.SupplierAnalyzerRoute.to : routes.LandingPageRoute.to}
           >
             {user ? "Back to the app" : "Back to home"}
           </WaspRouterLink>

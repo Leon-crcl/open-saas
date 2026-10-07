@@ -179,8 +179,8 @@ export function FileUploadPage() {
     <>
       <div className="space-y-8">
         <PageHeader
-          title="File Upload"
-          description="Securely store documents in your private storage and download them whenever you need."
+          title="Documents"
+          description="Keep contracts, certificates and quotes next to your supplier analysis. Files are stored privately and only you can access them."
         />
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)]">
           <Card>

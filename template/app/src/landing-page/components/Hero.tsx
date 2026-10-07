@@ -4,7 +4,7 @@ import { Container } from "../../client/components/layout/Container";
 import { Badge } from "../../client/components/ui/badge";
 import { Button } from "../../client/components/ui/button";
 import { hero } from "../contentSections";
-import { SchedulePreview, TaskListPreview, WindowFrame } from "./previews";
+import { RankingPreview, WeightsPreview, WindowFrame } from "./previews";
 
 export function Hero() {
   return (
@@ -45,10 +45,10 @@ export function Hero() {
         </div>
 
         <div className="relative mx-auto mt-14 max-w-4xl sm:mt-20">
-          <WindowFrame title="app.cadence.com/planner">
-            <div className="grid md:grid-cols-[1fr_1.15fr]">
-              <TaskListPreview className="border-border hidden border-r md:block" />
-              <SchedulePreview />
+          <WindowFrame title="app.supplyr.com/analyzer">
+            <div className="grid md:grid-cols-[1fr_1.4fr]">
+              <WeightsPreview className="border-border hidden border-r md:block" />
+              <RankingPreview />
             </div>
           </WindowFrame>
           <div

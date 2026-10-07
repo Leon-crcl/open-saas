@@ -26,7 +26,7 @@ export const logUserIn = async ({ page, user }: { page: Page; user: User }) => {
     clickLogin,
   ]);
 
-  await page.waitForURL("**/demo-app");
+  await page.waitForURL("**/supplier-analyzer");
 };
 
 export const signUserUp = async ({
@@ -81,7 +81,7 @@ export const makeStripePayment = async ({
 }: {
   test: typeof import("@playwright/test").test;
   page: Page;
-  planId: "hobby" | "pro" | "credits10";
+  planId: "hobby" | "pro";
 }) => {
   test.slow(); // Stripe payments take a long time to confirm and can cause tests to fail so we use a longer timeout
 
@@ -119,11 +119,7 @@ export const makeStripePayment = async ({
 
   await page.waitForURL("**/checkout?status=success");
   await page.waitForURL("**/account");
-  if (planId === "credits10") {
-    await expect(page.getByText("13 credits")).toBeVisible();
-  } else {
-    await expect(page.getByText(planId)).toBeVisible();
-  }
+  await expect(page.getByText(planId)).toBeVisible();
 };
 
 export const acceptAllCookies = async (page: Page) => {

@@ -1,10 +1,10 @@
 import {
   BarChart3,
   CreditCard,
-  Moon,
-  ShieldCheck,
-  Sparkles,
-  UploadCloud,
+  FileText,
+  LockKeyhole,
+  Scale,
+  ShieldAlert,
   type LucideIcon,
 } from "lucide-react";
 import { brand } from "../shared/brand";
@@ -14,82 +14,75 @@ import { BlogUrl, DocsUrl } from "../shared/common";
 // layout components.
 
 export const hero = {
-  eyebrow: "AI day planning, built for focus",
-  headline: "Turn your to-do list into a day that actually works.",
+  eyebrow: "Supplier analysis, simplified",
+  headline: "Choose the right supplier, backed by data.",
   subheadline: brand.description,
 };
 
 /** Placeholder customer names. Replace with real logos once you have them. */
 export const socialProof = {
-  statement: "Trusted by teams who protect their focus time",
-  companies: [
-    "Northwind",
-    "Lumen",
-    "Aperture",
-    "Stackline",
-    "Orbital",
-    "Fieldnote",
-  ],
+  statement: "Built for buyers and procurement teams who compare suppliers every day",
+  companies: ["Northwind", "Lumen", "Aperture", "Stackline", "Orbital", "Fieldnote"],
 };
 
 export const benefits = {
-  title: "Less planning. More doing.",
+  title: "From gut feeling to a clear decision.",
   description:
-    "Cadence handles the part of the day nobody enjoys, so your attention goes to the work itself.",
+    "Stop juggling spreadsheets and email threads. Supplyr turns supplier data into a ranking you can explain to anyone.",
   items: [
     {
-      title: "From list to plan in seconds",
+      title: "One place for every supplier",
       description:
-        "Dump your tasks, set your available hours and get a prioritized schedule, already broken down into concrete steps.",
+        "Keep price, quality, delivery time and risk for all your suppliers together, always up to date and easy to compare.",
     },
     {
-      title: "Plans that respect reality",
+      title: "A score you can explain",
       description:
-        "Time estimates and priorities keep every day honest, so a full schedule never turns into an impossible one.",
+        "A weighted score reflects your priorities. Change the weights and watch the ranking update instantly.",
     },
     {
       title: "Simple, predictable pricing",
       description:
-        "A flat subscription or one-time credits. No seats, no usage surprises and no contracts to untangle.",
+        "Start free with five suppliers and upgrade as your list grows. No per-seat fees and no contracts to untangle.",
     },
   ],
 };
 
 export const showcase = [
   {
-    id: "capture",
-    eyebrow: "Capture",
-    title: "Write it down once, in your own words",
+    id: "collect",
+    eyebrow: "Collect",
+    title: "Capture every supplier in one place",
     description:
-      "Add tasks the way you think about them. Adjust the time each one needs, check off what is done and keep everything in a single, quiet list.",
+      "Enter the four numbers that matter for each supplier. Add notes, a category and a country to keep your list organized as it grows.",
     points: [
-      "Fast task entry with inline time estimates",
-      "Tasks sync across every device you sign in on",
-      "Nothing to configure before you start",
+      "Price, quality, delivery time and risk at a glance",
+      "Edit values any time as quotes change",
+      "Store contracts and certificates next to your analysis",
     ],
   },
   {
-    id: "plan",
-    eyebrow: "Plan",
-    title: "A schedule you will actually follow",
+    id: "weigh",
+    eyebrow: "Weigh",
+    title: "Weight what matters to your business",
     description:
-      "One click turns your list into an ordered plan. Every task is split into small steps with realistic durations and a clear priority.",
+      "Price is not always the priority. Set how much each criterion counts and see the ranking recalculate live, with clear scores for every supplier.",
     points: [
-      "Prioritized by urgency and effort",
-      "Steps small enough to start immediately",
-      "Regenerate whenever your day changes",
+      "Adjustable weights, saved to your account",
+      "Transparent 0 to 100 scores per criterion",
+      "Highlights for best price, speed and lowest risk",
     ],
   },
   {
-    id: "manage",
-    eyebrow: "Manage",
-    title: "Files, billing and usage in one place",
+    id: "compare",
+    eyebrow: "Compare",
+    title: "Compare side by side and decide",
     description:
-      "Keep supporting documents next to your plans and see exactly what you use. Upgrade, top up credits or cancel from your account, no support ticket required.",
+      "Put up to four suppliers next to each other. The best value in every row is highlighted, so the right choice is easy to spot and easy to justify.",
     points: [
-      "Secure file uploads with private downloads",
-      "Transparent usage and credit balance",
-      "Self-service subscription management",
+      "Side-by-side table and radar chart",
+      "Best value highlighted in every row",
+      "Share the reasoning with your team",
     ],
   },
 ] as const;
@@ -101,87 +94,95 @@ export interface Feature {
 }
 
 export const featuresSection = {
-  title: "Everything you need, nothing you don't",
+  title: "Everything you need to evaluate suppliers",
   description:
-    "A focused set of tools, polished end to end and ready for the way you work.",
+    "A focused toolkit, polished end to end and ready for the way you work.",
 };
 
 export const features: Feature[] = [
   {
-    name: "AI scheduling",
+    name: "Weighted scoring",
     description:
-      "Structured, prioritized plans generated from a plain list of tasks.",
-    icon: Sparkles,
+      "A transparent score from 0 to 100 that follows your own priorities.",
+    icon: Scale,
   },
   {
-    name: "Secure accounts",
-    description: "Email sign-up with verification and password reset built in.",
-    icon: ShieldCheck,
-  },
-  {
-    name: "Flexible billing",
+    name: "Side-by-side comparison",
     description:
-      "Monthly subscriptions or one-time credit packs, managed by you.",
-    icon: CreditCard,
-  },
-  {
-    name: "File storage",
-    description:
-      "Upload documents and download them securely whenever you need them.",
-    icon: UploadCloud,
-  },
-  {
-    name: "Usage insights",
-    description:
-      "Clear dashboards for signups, revenue and activity across your product.",
+      "Compare up to four suppliers in a table and a radar chart.",
     icon: BarChart3,
   },
   {
-    name: "Light and dark themes",
-    description: "A comfortable interface at any hour, on any screen size.",
-    icon: Moon,
+    name: "Risk awareness",
+    description:
+      "Rate supplier risk and see it reflected in every ranking.",
+    icon: ShieldAlert,
+  },
+  {
+    name: "Document storage",
+    description:
+      "Keep contracts, certificates and quotes next to your analysis.",
+    icon: FileText,
+  },
+  {
+    name: "Secure accounts",
+    description:
+      "Your supplier data is private to your account, with email verification and password reset built in.",
+    icon: LockKeyhole,
+  },
+  {
+    name: "Flexible plans",
+    description:
+      "Start free and upgrade when you need more suppliers. Manage billing yourself.",
+    icon: CreditCard,
   },
 ];
 
 export const pricingSection = {
-  title: "Pricing that scales with you",
+  title: "Pricing that scales with your supplier list",
   description:
-    "Pick a plan, or buy credits only when you need them. Change anything later.",
+    "Start free, upgrade when you need more suppliers. Change or cancel anytime.",
 };
 
 export const faqs = [
   {
     id: 1,
-    question: "How does Cadence create my schedule?",
+    question: "How is the supplier score calculated?",
     answer:
-      "You add the tasks you want to get done and tell us how many hours you have. Cadence uses AI to prioritize the tasks, split each one into practical steps and estimate how long every step takes.",
+      "Quality is used as you enter it, and risk is inverted so that lower risk scores higher. Price and delivery time are scored relative to the suppliers you compare: the cheapest and fastest get 100, the most expensive and slowest get 0. The four scores are then combined using your weights.",
   },
   {
     id: 2,
-    question: "What is the difference between a plan and credits?",
+    question: "Can I change how much each criterion counts?",
     answer:
-      "Plans are monthly subscriptions that include schedule generations. Credits are a one-time purchase: each schedule you generate uses one credit, and unused credits never expire.",
+      "Yes. Adjust the weights for price, quality, delivery time and risk at any time. The ranking updates instantly, and you can save your preferred weights to your account.",
   },
   {
     id: 3,
+    question: "What do the quality and risk scales mean?",
+    answer:
+      "Both use a scale from 0 to 100. You decide what goes into them, for example an audit result or defect rate for quality and financial stability or geopolitical exposure for risk. Higher quality is better, lower risk is better.",
+  },
+  {
+    id: 4,
+    question: "How many suppliers can I add?",
+    answer:
+      "The free plan includes up to 5 suppliers, Hobby up to 25 and Pro up to 500. You can upgrade at any time, and deleting suppliers frees up space immediately.",
+  },
+  {
+    id: 5,
     question: "Can I change or cancel my subscription?",
     answer:
       "Yes. You can upgrade, downgrade or cancel at any time from your account. When you cancel, your plan stays active until the end of the current billing period.",
   },
   {
-    id: 4,
+    id: 6,
     question: "Is my data private and secure?",
     answer:
-      "Your tasks and files are only available to your account. Uploaded files are stored privately and are only accessible through short-lived, signed links.",
+      "Your suppliers and documents are only available to your account. Uploaded files are stored privately and are only accessible through short-lived, signed links.",
   },
   {
-    id: 5,
-    question: "Which payment methods do you accept?",
-    answer:
-      "Payments are processed securely by our payment provider and accept all major credit and debit cards. Taxes are calculated automatically at checkout.",
-  },
-  {
-    id: 6,
+    id: 7,
     question: "Where can I get help?",
     answer: `Browse the documentation or reach out at ${brand.supportEmail}. Pro subscribers receive priority support.`,
     href: DocsUrl,
@@ -189,9 +190,9 @@ export const faqs = [
 ];
 
 export const finalCta = {
-  title: "Your best day starts with a plan.",
+  title: "Make your next supplier decision with confidence.",
   description:
-    "Create your account and generate your first schedule in under a minute.",
+    "Create your account and compare your first suppliers in minutes.",
 };
 
 export interface FooterLink {

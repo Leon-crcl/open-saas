@@ -3,7 +3,7 @@ import { Link as WaspRouterLink, routes } from "wasp/client/router";
 import { Button } from "../../client/components/ui/button";
 import { cn } from "../../client/utils";
 import { PlanCard } from "../../payment/PlanCard";
-import { PaymentPlanId } from "../../payment/plans";
+import { getSubscriptionPaymentPlanIds } from "../../payment/plans";
 import {
   paymentPlanCards,
   recommendedPaymentPlanId,
@@ -19,8 +19,8 @@ export function PricingSection() {
         title={pricingSection.title}
         description={pricingSection.description}
       />
-      <div className="mx-auto mt-14 grid max-w-md grid-cols-1 gap-6 sm:mt-20 lg:max-w-none lg:grid-cols-3 lg:items-start">
-        {Object.values(PaymentPlanId).map((planId) => {
+      <div className="mx-auto mt-14 grid max-w-md grid-cols-1 gap-6 sm:mt-20 lg:max-w-4xl lg:grid-cols-2 lg:items-start">
+        {getSubscriptionPaymentPlanIds().map((planId) => {
           const isRecommended = planId === recommendedPaymentPlanId;
           return (
             <PlanCard
@@ -44,7 +44,10 @@ export function PricingSection() {
           );
         })}
       </div>
-      <p className="mt-10 text-center text-sm">
+      <p className="text-muted-foreground mt-10 text-center text-sm">
+        Start free with up to 5 suppliers. No credit card required.
+      </p>
+      <p className="mt-3 text-center text-sm">
         <WaspRouterLink
           to={routes.PricingPageRoute.to}
           className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 font-medium transition-colors"
