@@ -1,166 +1,236 @@
-import daBoiAvatar from "../client/static/da-boi.webp";
-import kivo from "../client/static/examples/kivo.webp";
-import messync from "../client/static/examples/messync.webp";
-import microinfluencerClub from "../client/static/examples/microinfluencers.webp";
-import promptpanda from "../client/static/examples/promptpanda.webp";
-import reviewradar from "../client/static/examples/reviewradar.webp";
-import scribeist from "../client/static/examples/scribeist.webp";
-import searchcraft from "../client/static/examples/searchcraft.webp";
+import {
+  BarChart3,
+  CreditCard,
+  FileText,
+  LockKeyhole,
+  Scale,
+  ShieldAlert,
+  type LucideIcon,
+} from "lucide-react";
+import { brand } from "../shared/brand";
 import { BlogUrl, DocsUrl } from "../shared/common";
-import type { GridFeature } from "./components/FeaturesGrid";
 
-export const features: GridFeature[] = [
+// All landing page copy lives here so it can be edited without touching the
+// layout components.
+
+export const hero = {
+  eyebrow: "Supplier analysis, simplified",
+  headline: "Choose the right supplier, backed by data.",
+  subheadline: brand.description,
+};
+
+/** Placeholder customer names. Replace with real logos once you have them. */
+export const socialProof = {
+  statement: "Built for buyers and procurement teams who compare suppliers every day",
+  companies: ["Northwind", "Lumen", "Aperture", "Stackline", "Orbital", "Fieldnote"],
+};
+
+export const benefits = {
+  title: "From gut feeling to a clear decision.",
+  description:
+    "Stop juggling spreadsheets and email threads. Supplyr turns supplier data into a ranking you can explain to anyone.",
+  items: [
+    {
+      title: "One place for every supplier",
+      description:
+        "Keep price, quality, delivery time and risk for all your suppliers together, always up to date and easy to compare.",
+    },
+    {
+      title: "A score you can explain",
+      description:
+        "A weighted score reflects your priorities. Change the weights and watch the ranking update instantly.",
+    },
+    {
+      title: "Simple, predictable pricing",
+      description:
+        "Start free with five suppliers and upgrade as your list grows. No per-seat fees and no contracts to untangle.",
+    },
+  ],
+};
+
+export const showcase = [
   {
-    name: "Cool Feature 1",
-    description: "Your feature",
-    emoji: "🤝",
-    href: DocsUrl,
-    size: "small",
+    id: "collect",
+    eyebrow: "Collect",
+    title: "Capture every supplier in one place",
+    description:
+      "Enter the four numbers that matter for each supplier. Add notes, a category and a country to keep your list organized as it grows.",
+    points: [
+      "Price, quality, delivery time and risk at a glance",
+      "Edit values any time as quotes change",
+      "Store contracts and certificates next to your analysis",
+    ],
   },
   {
-    name: "Cool Feature 2",
-    description: "Feature description",
-    emoji: "🔐",
-    href: DocsUrl,
-    size: "small",
+    id: "weigh",
+    eyebrow: "Weigh",
+    title: "Weight what matters to your business",
+    description:
+      "Price is not always the priority. Set how much each criterion counts and see the ranking recalculate live, with clear scores for every supplier.",
+    points: [
+      "Adjustable weights, saved to your account",
+      "Transparent 0 to 100 scores per criterion",
+      "Highlights for best price, speed and lowest risk",
+    ],
   },
   {
-    name: "Cool Feature 3",
-    description: "Describe your cool feature here",
-    emoji: "🥞",
-    href: DocsUrl,
-    size: "medium",
+    id: "compare",
+    eyebrow: "Compare",
+    title: "Compare side by side and decide",
+    description:
+      "Put up to four suppliers next to each other. The best value in every row is highlighted, so the right choice is easy to spot and easy to justify.",
+    points: [
+      "Side-by-side table and radar chart",
+      "Best value highlighted in every row",
+      "Share the reasoning with your team",
+    ],
+  },
+] as const;
+
+export interface Feature {
+  name: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+export const featuresSection = {
+  title: "Everything you need to evaluate suppliers",
+  description:
+    "A focused toolkit, polished end to end and ready for the way you work.",
+};
+
+export const features: Feature[] = [
+  {
+    name: "Weighted scoring",
+    description:
+      "A transparent score from 0 to 100 that follows your own priorities.",
+    icon: Scale,
   },
   {
-    name: "Cool Feature 4",
-    description: "Describe your cool feature here",
-    emoji: "💸",
-    href: DocsUrl,
-    size: "large",
+    name: "Side-by-side comparison",
+    description:
+      "Compare up to four suppliers in a table and a radar chart.",
+    icon: BarChart3,
   },
   {
-    name: "Cool Feature 5",
-    description: "Describe your cool feature here",
-    emoji: "💼",
-    href: DocsUrl,
-    size: "large",
+    name: "Risk awareness",
+    description:
+      "Rate supplier risk and see it reflected in every ranking.",
+    icon: ShieldAlert,
   },
   {
-    name: "Cool Feature 6",
-    description: "It is cool",
-    emoji: "📈",
-    href: DocsUrl,
-    size: "small",
+    name: "Document storage",
+    description:
+      "Keep contracts, certificates and quotes next to your analysis.",
+    icon: FileText,
   },
   {
-    name: "Cool Feature 7",
-    description: "Cool feature",
-    emoji: "📧",
-    href: DocsUrl,
-    size: "small",
+    name: "Secure accounts",
+    description:
+      "Your supplier data is private to your account, with email verification and password reset built in.",
+    icon: LockKeyhole,
   },
   {
-    name: "Cool Feature 8",
-    description: "Describe your cool feature here",
-    emoji: "🤖",
-    href: DocsUrl,
-    size: "medium",
-  },
-  {
-    name: "Cool Feature 9",
-    description: "Describe your cool feature here",
-    emoji: "🚀",
-    href: DocsUrl,
-    size: "medium",
+    name: "Flexible plans",
+    description:
+      "Start free and upgrade when you need more suppliers. Manage billing yourself.",
+    icon: CreditCard,
   },
 ];
 
-export const testimonials = [
-  {
-    name: "Da Boi",
-    role: "Wasp Mascot",
-    avatarSrc: daBoiAvatar,
-    socialUrl: "https://twitter.com/wasplang",
-    quote: "I don't even know how to code. I'm just a plushie.",
-  },
-  {
-    name: "Mr. Foobar",
-    role: "Founder @ Cool Startup",
-    avatarSrc: daBoiAvatar,
-    socialUrl: "",
-    quote: "This product makes me cooler than I already am.",
-  },
-  {
-    name: "Jamie",
-    role: "Happy Customer",
-    avatarSrc: daBoiAvatar,
-    socialUrl: "#",
-    quote: "My cats love it!",
-  },
-];
+export const pricingSection = {
+  title: "Pricing that scales with your supplier list",
+  description:
+    "Start free, upgrade when you need more suppliers. Change or cancel anytime.",
+};
 
 export const faqs = [
   {
     id: 1,
-    question: "Whats the meaning of life?",
-    answer: "42.",
-    href: "https://en.wikipedia.org/wiki/42_(number)",
+    question: "How is the supplier score calculated?",
+    answer:
+      "Quality is used as you enter it, and risk is inverted so that lower risk scores higher. Price and delivery time are scored relative to the suppliers you compare: the cheapest and fastest get 100, the most expensive and slowest get 0. The four scores are then combined using your weights.",
+  },
+  {
+    id: 2,
+    question: "Can I change how much each criterion counts?",
+    answer:
+      "Yes. Adjust the weights for price, quality, delivery time and risk at any time. The ranking updates instantly, and you can save your preferred weights to your account.",
+  },
+  {
+    id: 3,
+    question: "What do the quality and risk scales mean?",
+    answer:
+      "Both use a scale from 0 to 100. You decide what goes into them, for example an audit result or defect rate for quality and financial stability or geopolitical exposure for risk. Higher quality is better, lower risk is better.",
+  },
+  {
+    id: 4,
+    question: "How many suppliers can I add?",
+    answer:
+      "The free plan includes up to 5 suppliers, Hobby up to 25 and Pro up to 500. You can upgrade at any time, and deleting suppliers frees up space immediately.",
+  },
+  {
+    id: 5,
+    question: "Can I change or cancel my subscription?",
+    answer:
+      "Yes. You can upgrade, downgrade or cancel at any time from your account. When you cancel, your plan stays active until the end of the current billing period.",
+  },
+  {
+    id: 6,
+    question: "Is my data private and secure?",
+    answer:
+      "Your suppliers and documents are only available to your account. Uploaded files are stored privately and are only accessible through short-lived, signed links.",
+  },
+  {
+    id: 7,
+    question: "Where can I get help?",
+    answer: `Browse the documentation or reach out at ${brand.supportEmail}. Pro subscribers receive priority support.`,
+    href: DocsUrl,
   },
 ];
 
-export const footerNavigation = {
-  app: [
-    { name: "Documentation", href: DocsUrl },
-    { name: "Blog", href: BlogUrl },
-  ],
-  company: [
-    { name: "About", href: "https://wasp.sh" },
-    { name: "Privacy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-  ],
+export const finalCta = {
+  title: "Make your next supplier decision with confidence.",
+  description:
+    "Create your account and compare your first suppliers in minutes.",
 };
 
-export const examples = [
-  {
-    name: "Example #1",
-    description: "Describe your example here.",
-    imageSrc: kivo,
-    href: "#",
+export interface FooterLink {
+  name: string;
+  href: string;
+}
+
+export const footerNavigation: Record<
+  "product" | "company" | "resources" | "legal",
+  { title: string; links: FooterLink[] }
+> = {
+  product: {
+    title: "Product",
+    links: [
+      { name: "Features", href: "/#features" },
+      { name: "Pricing", href: "/pricing" },
+      { name: "FAQ", href: "/#faq" },
+    ],
   },
-  {
-    name: "Example #2",
-    description: "Describe your example here.",
-    imageSrc: messync,
-    href: "#",
+  company: {
+    title: "Company",
+    links: [
+      { name: "About", href: "https://wasp.sh" },
+      { name: "Contact", href: `mailto:${brand.supportEmail}` },
+    ],
   },
-  {
-    name: "Example #3",
-    description: "Describe your example here.",
-    imageSrc: microinfluencerClub,
-    href: "#",
+  resources: {
+    title: "Resources",
+    links: [
+      { name: "Documentation", href: DocsUrl },
+      { name: "Blog", href: BlogUrl },
+    ],
   },
-  {
-    name: "Example #4",
-    description: "Describe your example here.",
-    imageSrc: promptpanda,
-    href: "#",
+  legal: {
+    title: "Legal",
+    links: [
+      { name: "Privacy policy", href: "#" },
+      { name: "Terms of service", href: "#" },
+    ],
   },
-  {
-    name: "Example #5",
-    description: "Describe your example here.",
-    imageSrc: reviewradar,
-    href: "#",
-  },
-  {
-    name: "Example #6",
-    description: "Describe your example here.",
-    imageSrc: scribeist,
-    href: "#",
-  },
-  {
-    name: "Example #7",
-    description: "Describe your example here.",
-    imageSrc: searchcraft,
-    href: "#",
-  },
-];
+};

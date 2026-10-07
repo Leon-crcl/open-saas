@@ -1,16 +1,20 @@
 import { ResetPasswordForm } from "wasp/client/auth";
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
+import { authAppearance } from "../appearance";
 import { AuthPageLayout } from "../AuthPageLayout";
 
 export function PasswordResetPage() {
   return (
-    <AuthPageLayout>
-      <ResetPasswordForm />
-      <br />
-      <span className="text-sm font-medium text-gray-900">
-        If everything is okay,{" "}
-        <WaspRouterLink to={routes.LoginRoute.to}>go to login</WaspRouterLink>
-      </span>
+    <AuthPageLayout
+      title="Choose a new password"
+      footer={
+        <p>
+          If everything is okay,{" "}
+          <WaspRouterLink to={routes.LoginRoute.to}>go to login</WaspRouterLink>
+        </p>
+      }
+    >
+      <ResetPasswordForm appearance={authAppearance} />
     </AuthPageLayout>
   );
 }

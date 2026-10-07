@@ -1,22 +1,31 @@
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
+
 interface BreadcrumbProps {
   pageName: string;
 }
+
 export function Breadcrumb({ pageName }: BreadcrumbProps) {
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <h2 className="text-title-md2 text-foreground font-semibold">
+    <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <h1 className="text-foreground text-2xl font-semibold tracking-tight">
         {pageName}
-      </h2>
+      </h1>
 
-      <nav>
-        <ul className="flex items-center gap-1">
+      <nav aria-label="Breadcrumb">
+        <ol className="text-muted-foreground flex items-center gap-1.5 text-sm">
           <li>
-            <WaspRouterLink to={routes.AdminRoute.to}>Dashboard</WaspRouterLink>
+            <WaspRouterLink
+              to={routes.AdminRoute.to}
+              className="hover:text-foreground transition-colors"
+            >
+              Dashboard
+            </WaspRouterLink>
           </li>
-          <li>/</li>
-          <li className="font-medium">{pageName}</li>
-        </ul>
+          <li aria-hidden="true">/</li>
+          <li className="text-foreground font-medium" aria-current="page">
+            {pageName}
+          </li>
+        </ol>
       </nav>
     </div>
   );

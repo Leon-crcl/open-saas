@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { Info } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "wasp/client/auth";
@@ -10,49 +10,14 @@ import {
 import { routes } from "wasp/client/router";
 import { Alert, AlertDescription } from "../client/components/ui/alert";
 import { Button } from "../client/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardTitle,
-} from "../client/components/ui/card";
 import { cn } from "../client/utils";
+import { PlanCard } from "./PlanCard";
 import {
-  PaymentPlanId,
-  paymentPlans,
-  prettyPaymentPlanName,
   SubscriptionStatus,
+  getSubscriptionPaymentPlanIds,
+  type PaymentPlanId,
 } from "./plans";
-
-const bestDealPaymentPlanId: PaymentPlanId = PaymentPlanId.Pro;
-
-interface PaymentPlanCard {
-  name: string;
-  price: string;
-  description: string;
-  features: string[];
-}
-
-export const paymentPlanCards: Record<PaymentPlanId, PaymentPlanCard> = {
-  [PaymentPlanId.Hobby]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Hobby),
-    price: "$9.99",
-    description: "All you need to get started",
-    features: ["Limited monthly usage", "Basic support"],
-  },
-  [PaymentPlanId.Pro]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Pro),
-    price: "$19.99",
-    description: "Our most popular plan",
-    features: ["Unlimited monthly usage", "Priority customer support"],
-  },
-  [PaymentPlanId.Credits10]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Credits10),
-    price: "$9.99",
-    description: "One-time purchase of 10 credits for your account",
-    features: ["Use credits for e.g. OpenAI API calls", "No expiration date"],
-  },
-};
+import { recommendedPaymentPlanId } from "./planCards";
 
 export function PricingPage() {
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
@@ -118,98 +83,47 @@ export function PricingPage() {
   };
 
   return (
-    <div className="py-10 lg:mt-10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div id="pricing" className="mx-auto max-w-4xl text-center">
-          <h2 className="text-foreground mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            Pick your <span className="text-primary">pricing</span>
-          </h2>
-        </div>
-        <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-center text-lg leading-8">
-          Choose between Stripe, LemonSqueezy or Polar as your payment provider.
-          Just add your Product IDs! Try it out below with test credit card
-          number <br />
-          <span className="bg-muted text-muted-foreground rounded-md px-2 py-1 font-mono text-sm">
-            4242 4242 4242 4242 4242
-          </span>
+    <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <div id="pricing" className="mx-auto max-w-2xl text-center">
+        <h1 className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl">
+          Simple, transparent pricing
+        </h1>
+        <p className="text-muted-foreground mt-4 text-base leading-7 sm:text-lg">
+          Start with a plan that fits how you work. Upgrade, downgrade or cancel
+          at any time.
         </p>
-        {errorMessage && (
-          <Alert variant="destructive" className="mt-8">
-            <AlertDescription>{errorMessage}</AlertDescription>
-          </Alert>
+        {import.meta.env.DEV && (
+          <p className="text-muted-foreground mt-4 inline-flex items-center gap-2 text-xs">
+            <Info className="size-3.5" aria-hidden="true" />
+            Test mode: pay with card number
+            <code className="bg-muted rounded px-1.5 py-0.5 font-mono">
+              4242 4242 4242 4242
+            </code>
+          </p>
         )}
-        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8">
-          {Object.values(PaymentPlanId).map((planId) => (
-            <Card
+      </div>
+      {errorMessage && (
+        <Alert variant="destructive" className="mx-auto mt-8 max-w-2xl">
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
+      <div className="mx-auto mt-12 grid max-w-md grid-cols-1 gap-6 sm:mt-16 lg:max-w-4xl lg:grid-cols-2 lg:items-start">
+        {getSubscriptionPaymentPlanIds().map((planId) => {
+          const isRecommended = planId === recommendedPaymentPlanId;
+          return (
+            <PlanCard
               key={planId}
-              className={cn(
-                "relative flex grow flex-col justify-between overflow-hidden transition-all duration-300 hover:shadow-lg",
-                {
-                  "ring-primary bg-transparent! ring-2":
-                    planId === bestDealPaymentPlanId,
-                  "ring-border ring-1 lg:my-8":
-                    planId !== bestDealPaymentPlanId,
-                },
-              )}
-            >
-              {planId === bestDealPaymentPlanId && (
-                <div
-                  className="absolute right-0 top-0 -z-10 h-full w-full transform-gpu blur-3xl"
-                  aria-hidden="true"
-                >
-                  <div
-                    className="from-primary/40 via-primary/20 to-primary/10 bg-linear-to-br absolute h-full w-full opacity-30"
-                    style={{
-                      clipPath: "circle(670% at 50% 50%)",
-                    }}
-                  />
-                </div>
-              )}
-              <CardContent className="h-full justify-between p-8 xl:p-10">
-                <div className="flex items-center justify-between gap-x-4">
-                  <CardTitle
-                    id={planId}
-                    className="text-foreground text-lg font-semibold leading-8"
-                  >
-                    {paymentPlanCards[planId].name}
-                  </CardTitle>
-                </div>
-                <p className="text-muted-foreground mt-4 text-sm leading-6">
-                  {paymentPlanCards[planId].description}
-                </p>
-                <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-foreground text-4xl font-bold tracking-tight">
-                    {paymentPlanCards[planId].price}
-                  </span>
-                  <span className="text-muted-foreground text-sm font-semibold leading-6">
-                    {paymentPlans[planId].effect.kind === "subscription" &&
-                      "/month"}
-                  </span>
-                </p>
-                <ul
-                  role="list"
-                  className="text-muted-foreground mt-8 space-y-3 text-sm leading-6"
-                >
-                  {paymentPlanCards[planId].features.map((feature) => (
-                    <li key={feature} className="flex gap-x-3">
-                      <CheckCircle
-                        className="text-primary h-5 w-5 flex-none"
-                        aria-hidden="true"
-                      />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                {isUserSubscribed ? (
+              planId={planId}
+              isRecommended={isRecommended}
+              className={cn(isRecommended && "order-first lg:order-none")}
+              cta={
+                isUserSubscribed ? (
                   <Button
                     onClick={handleCustomerPortalClick}
                     disabled={isCustomerPortalUrlLoading}
                     aria-describedby="manage-subscription"
-                    variant={
-                      planId === bestDealPaymentPlanId ? "default" : "outline"
-                    }
+                    variant={isRecommended ? "brand" : "outline"}
+                    size="lg"
                     className="w-full"
                   >
                     Manage Subscription
@@ -218,20 +132,23 @@ export function PricingPage() {
                   <Button
                     onClick={() => handleBuyNowClick(planId)}
                     aria-describedby={planId}
-                    variant={
-                      planId === bestDealPaymentPlanId ? "default" : "outline"
-                    }
+                    variant={isRecommended ? "brand" : "outline"}
+                    size="lg"
                     className="w-full"
                     disabled={isPaymentLoading}
                   >
                     {user ? "Buy plan" : "Log in to buy plan"}
                   </Button>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+                )
+              }
+            />
+          );
+        })}
       </div>
+      <p className="text-muted-foreground mt-10 text-center text-sm">
+        Prices in USD. Taxes calculated at checkout. Secure payments, you can
+        cancel anytime from your account.
+      </p>
     </div>
   );
 }

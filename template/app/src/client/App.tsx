@@ -3,12 +3,22 @@ import { Outlet, useLocation } from "react-router";
 import { routes } from "wasp/client/router";
 import { Toaster } from "../client/components/ui/toaster";
 import "./Main.css";
+import { AppShell } from "./components/AppShell";
 import { NavBar } from "./components/NavBar/NavBar";
-import {
-  demoNavigationitems,
-  marketingNavigationItems,
-} from "./components/NavBar/constants";
+import { marketingNavigationItems } from "./components/NavBar/constants";
 import { CookieConsentBanner } from "./components/cookie-consent/Banner";
+import { useColorMode } from "./hooks/useColorMode";
+
+const appAreaRoutes = [
+  routes.SupplierAnalyzerRoute.to,
+  routes.FileUploadRoute.to,
+  routes.AccountRoute.to,
+];
+
+const standaloneRoutes = [
+  routes.LoginRoute.build(),
+  routes.SignupRoute.build(),
+];
 
 /**
  * use this component to wrap all child components
@@ -16,23 +26,18 @@ import { CookieConsentBanner } from "./components/cookie-consent/Banner";
  */
 export function App() {
   const location = useLocation();
-  const isMarketingPage = useMemo(() => {
-    return (
-      location.pathname === routes.LandingPageRoute.to ||
-      location.pathname === routes.PricingPageRoute.to
-    );
-  }, [location]);
+  // Keeps the persisted light/dark preference applied on every page.
+  useColorMode();
 
-  const navigationItems = isMarketingPage
-    ? marketingNavigationItems
-    : demoNavigationitems;
+  const isStandalonePage = useMemo(
+    () => standaloneRoutes.includes(location.pathname),
+    [location],
+  );
 
-  const shouldDisplayAppNavBar = useMemo(() => {
-    return (
-      location.pathname !== routes.LoginRoute.build() &&
-      location.pathname !== routes.SignupRoute.build()
-    );
-  }, [location]);
+  const isAppArea = useMemo(
+    () => appAreaRoutes.some((route) => location.pathname.startsWith(route)),
+    [location],
+  );
 
   const isAdminDashboard = useMemo(() => {
     return location.pathname.startsWith(routes.AdminRoute.to);
@@ -51,16 +56,16 @@ export function App() {
   return (
     <>
       <div className="bg-background text-foreground min-h-screen">
-        {isAdminDashboard ? (
+        {isAdminDashboard || isStandalonePage ? (
           <Outlet />
+        ) : isAppArea ? (
+          <AppShell>
+            <Outlet />
+          </AppShell>
         ) : (
           <>
-            {shouldDisplayAppNavBar && (
-              <NavBar navigationItems={navigationItems} />
-            )}
-            <div className="max-w-(--breakpoint-2xl) mx-auto">
-              <Outlet />
-            </div>
+            <NavBar navigationItems={marketingNavigationItems} />
+            <Outlet />
           </>
         )}
       </div>

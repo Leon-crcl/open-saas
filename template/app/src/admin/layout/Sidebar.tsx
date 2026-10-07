@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import { Link, routes } from "wasp/client/router";
-import Logo from "../../client/static/logo.svg";
+import { Logo } from "../../client/components/Logo";
 import { cn } from "../../client/utils";
 import { SidebarLinkGroup } from "./SidebarLinkGroup";
 
@@ -71,7 +71,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     <aside
       ref={sidebar}
       className={cn(
-        "bg-muted z-9999 w-72.5 absolute left-0 top-0 flex h-screen flex-col overflow-y-hidden border-r duration-300 ease-linear lg:static lg:translate-x-0",
+        "bg-card border-border z-9999 w-64 absolute left-0 top-0 flex h-screen flex-col overflow-y-hidden border-r duration-300 ease-linear lg:static lg:translate-x-0",
         {
           "translate-x-0": sidebarOpen,
           "-translate-x-full": !sidebarOpen,
@@ -79,9 +79,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       )}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="py-5.5 lg:py-6.5 flex items-center justify-between gap-2 px-6">
+      <div className="flex h-16 items-center justify-between gap-2 px-5">
         <Link to={routes.LandingPageRoute.to}>
-          <img src={Logo} alt="Logo" width={50} />
+          <Logo />
         </Link>
 
         <button
@@ -91,18 +91,18 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          <X />
+          <X className="size-5" />
         </button>
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
+        <nav className="px-3 py-4">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="text-muted-foreground mb-4 ml-4 text-sm font-semibold">
-              MENU
+            <h3 className="text-muted-foreground mb-3 ml-3 text-xs font-medium uppercase tracking-wider">
+              Menu
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
@@ -112,9 +112,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 end
                 className={({ isActive }) =>
                   cn(
-                    "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out",
+                    "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                     {
-                      "bg-accent text-accent-foreground": isActive,
+                      "bg-accent text-foreground": isActive,
                     },
                   )
                 }
@@ -132,9 +132,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   end
                   className={({ isActive }) =>
                     cn(
-                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out",
+                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       {
-                        "bg-accent text-accent-foreground": isActive,
+                        "bg-accent text-foreground": isActive,
                       },
                     )
                   }
@@ -152,9 +152,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   end
                   className={({ isActive }) =>
                     cn(
-                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out",
+                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       {
-                        "bg-accent text-accent-foreground": isActive,
+                        "bg-accent text-foreground": isActive,
                       },
                     )
                   }
@@ -169,7 +169,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
           {/* <!-- Others Group --> */}
           <div>
-            <h3 className="text-muted-foreground mb-4 ml-4 text-sm font-semibold">
+            <h3 className="text-muted-foreground mb-3 ml-3 text-xs font-medium uppercase tracking-wider">
               Extra Components
             </h3>
 
@@ -181,9 +181,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   end
                   className={({ isActive }) =>
                     cn(
-                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out",
+                      "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       {
-                        "bg-accent text-accent-foreground": isActive,
+                        "bg-accent text-foreground": isActive,
                       },
                     )
                   }
@@ -204,9 +204,9 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       <NavLink
                         to="#"
                         className={cn(
-                          "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out",
+                          "text-muted-foreground hover:bg-accent hover:text-accent-foreground group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                           {
-                            "bg-accent text-accent-foreground":
+                            "bg-accent text-foreground":
                               pathname.includes("ui"),
                           },
                         )}

@@ -7,8 +7,9 @@ const schema = {
     {
       "@type": "SoftwareApplication",
       "@id": "https://your-saas-app.com/#software",
-      name: "Your Open SaaS App",
-      description: "Your apps main description and features.",
+      name: "Supplyr",
+      description:
+        "Compare suppliers on price, quality, delivery time and risk and choose with confidence.",
       url: "https://your-saas-app.com",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Cross-platform",
@@ -23,8 +24,9 @@ const schema = {
       "@type": "WebSite",
       "@id": "https://your-saas-app.com/#website",
       url: "https://your-saas-app.com",
-      name: "Your Open SaaS App",
-      description: "Your apps main description and features.",
+      name: "Supplyr",
+      description:
+        "Compare suppliers on price, quality, delivery time and risk and choose with confidence.",
     },
   ],
 };

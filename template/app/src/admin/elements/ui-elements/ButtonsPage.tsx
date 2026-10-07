@@ -10,7 +10,7 @@ export function ButtonsPage({ user }: { user: AuthUser }) {
       <Breadcrumb pageName="Buttons" />
 
       {/* Button Variants */}
-      <div className="border-border bg-card shadow-default mb-10 rounded-sm border">
+      <div className="border-border bg-card shadow-xs mb-10 rounded-lg border">
         <div className="border-border border-b px-7 py-4">
           <h3 className="text-foreground font-medium">Button Variants</h3>
         </div>
@@ -28,7 +28,7 @@ export function ButtonsPage({ user }: { user: AuthUser }) {
       </div>
 
       {/* Button Sizes */}
-      <div className="border-border bg-card shadow-default mb-10 rounded-sm border">
+      <div className="border-border bg-card shadow-xs mb-10 rounded-lg border">
         <div className="border-border border-b px-7 py-4">
           <h3 className="text-foreground font-medium">Button Sizes</h3>
         </div>
@@ -46,7 +46,7 @@ export function ButtonsPage({ user }: { user: AuthUser }) {
       </div>
 
       {/* Button with Icon */}
-      <div className="border-border bg-card shadow-default mb-10 rounded-sm border">
+      <div className="border-border bg-card shadow-xs mb-10 rounded-lg border">
         <div className="border-border border-b px-7 py-4">
           <h3 className="text-foreground font-medium">Button with Icon</h3>
         </div>

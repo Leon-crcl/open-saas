@@ -18,15 +18,15 @@ export function TotalPayingUsersCard({
 
   return (
     <Card>
-      <CardHeader>
-        <div className="bg-muted h-11.5 w-11.5 flex items-center justify-center rounded-full">
-          <ShoppingBag className="size-6" />
+      <CardHeader className="pb-3">
+        <div className="bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-md">
+          <ShoppingBag className="size-4" aria-hidden="true" />
         </div>
       </CardHeader>
 
-      <CardContent className="flex justify-between">
+      <CardContent className="flex items-end justify-between">
         <div>
-          <h4 className="text-title-md text-foreground font-bold">
+          <h4 className="text-foreground text-2xl font-semibold tracking-tight tabular-nums">
             {dailyStats?.paidUserCount}
           </h4>
           <span className="text-muted-foreground text-sm font-medium">
@@ -42,10 +42,14 @@ export function TotalPayingUsersCard({
             "text-muted-foreground": isLoading || !dailyStats?.paidUserDelta,
           })}
         >
-          {isLoading ? "..." : (dailyStats?.paidUserDelta ?? "-")}
+          {isLoading ? "..." : dailyStats?.paidUserDelta ?? "-"}
           {!isLoading &&
             (dailyStats?.paidUserDelta ?? 0) !== 0 &&
-            (isDeltaPositive ? <ArrowUp /> : <ArrowDown />)}
+            (isDeltaPositive ? (
+              <ArrowUp className="size-4" />
+            ) : (
+              <ArrowDown className="size-4" />
+            ))}
         </span>
       </CardContent>
     </Card>

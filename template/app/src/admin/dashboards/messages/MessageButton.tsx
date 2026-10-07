@@ -1,23 +1,19 @@
 import { MessageCircleMore } from "lucide-react";
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
+import { Button } from "../../../client/components/ui/button";
 
 export function MessageButton() {
   return (
-    <li
-      className="relative"
-      // eslint-disable-next-line react/no-unknown-property
-      x-data="{ dropdownOpen: false, notifying: true }"
-    >
-      <WaspRouterLink
-        className="border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 h-8.5 w-8.5 relative flex items-center justify-center rounded-full border-[0.5px] dark:text-white"
-        to={routes.AdminMessagesRoute.to}
-      >
-        <span className="bg-meta-1 z-1 absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full">
-          {/* TODO: only animate if there are new messages */}
-          <span className="bg-meta-1 -z-1 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-        </span>
-        <MessageCircleMore className="size-5" />
-      </WaspRouterLink>
+    <li className="relative">
+      <Button variant="ghost" size="icon" asChild>
+        <WaspRouterLink to={routes.AdminMessagesRoute.to} aria-label="Messages">
+          <MessageCircleMore className="size-5!" />
+          <span
+            aria-hidden="true"
+            className="bg-brand ring-background absolute right-1.5 top-1.5 size-2 rounded-full ring-2"
+          />
+        </WaspRouterLink>
+      </Button>
     </li>
   );
 }

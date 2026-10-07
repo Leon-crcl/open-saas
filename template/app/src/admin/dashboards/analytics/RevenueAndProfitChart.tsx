@@ -9,9 +9,9 @@ const options: ApexOptions = {
     position: "top",
     horizontalAlign: "left",
   },
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ["#4f46e5", "#a1a1aa"],
   chart: {
-    fontFamily: "system-ui, sans-serif",
+    fontFamily: "Inter Variable, system-ui, sans-serif",
     height: 335,
     type: "area",
     dropShadow: {
@@ -202,26 +202,26 @@ export function RevenueAndProfitChart({ weeklyStats }: DailyStatsProps) {
   }, [daysOfWeekArr, dailyRevenueArray]);
 
   return (
-    <div className="border-border bg-card shadow-default pt-7.5 sm:px-7.5 col-span-12 rounded-sm border px-5 pb-5 xl:col-span-8">
+    <div className="border-border bg-card col-span-12 rounded-lg border p-5 shadow-xs sm:p-6 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <div className="min-w-47.5 flex">
-            <span className="border-primary mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border">
-              <span className="bg-primary block h-2.5 w-full max-w-2.5 rounded-full"></span>
+            <span className="border-brand mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border">
+              <span className="bg-brand block h-2.5 w-full max-w-2.5 rounded-full"></span>
             </span>
             <div className="w-full">
-              <p className="text-primary font-semibold">Total Profit</p>
+              <p className="text-foreground font-semibold">Total Profit</p>
               <p className="text-muted-foreground text-sm font-medium">
                 Last 7 Days
               </p>
             </div>
           </div>
           <div className="min-w-47.5 flex">
-            <span className="border-secondary mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border">
-              <span className="bg-secondary block h-2.5 w-full max-w-2.5 rounded-full"></span>
+            <span className="border-muted-foreground mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border">
+              <span className="bg-muted-foreground block h-2.5 w-full max-w-2.5 rounded-full"></span>
             </span>
             <div className="w-full">
-              <p className="text-secondary font-semibold">Total Revenue</p>
+              <p className="text-foreground font-semibold">Total Revenue</p>
               <p className="text-muted-foreground text-sm font-medium">
                 Last 7 Days
               </p>

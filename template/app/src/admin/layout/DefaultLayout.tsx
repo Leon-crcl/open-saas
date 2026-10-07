@@ -27,7 +27,7 @@ export function DefaultLayout({ children, user }: Props) {
             user={user}
           />
           <main>
-            <div className="max-w-(--breakpoint-2xl) mx-auto p-4 md:p-6 2xl:p-10">
+            <div className="max-w-(--breakpoint-2xl) mx-auto p-4 md:p-8 2xl:p-10">
               {children}
             </div>
           </main>

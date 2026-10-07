@@ -91,7 +91,7 @@ export function UsersTable() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="border-border bg-card rounded-sm border shadow-sm">
+      <div className="border-border bg-card overflow-hidden rounded-lg border shadow-xs">
         <div className="bg-muted/40 flex w-full flex-col items-start justify-between gap-3 p-6">
           <span className="text-sm font-medium">Filters:</span>
           <div className="flex w-full items-center justify-between gap-3 px-2">
@@ -265,57 +265,61 @@ export function UsersTable() {
           )}
         </div>
 
-        <div className="border-border py-4.5 grid grid-cols-9 border-t-4 px-4 md:px-6">
-          <div className="col-span-3 flex items-center">
-            <p className="font-medium">Email / Username</p>
-          </div>
-          <div className="col-span-2 flex items-center">
-            <p className="font-medium">Subscription Status</p>
-          </div>
-          <div className="col-span-2 flex items-center">
-            <p className="font-medium">Stripe ID</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="font-medium">Is Admin</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="font-medium"></p>
-          </div>
-        </div>
-        {isLoading && <LoadingSpinner />}
-        {!!data?.users &&
-          data?.users?.length > 0 &&
-          data.users.map((user) => (
-            <div
-              key={user.id}
-              className="py-4.5 grid grid-cols-9 gap-4 px-4 md:px-6"
-            >
+        <div className="overflow-x-auto">
+          <div className="min-w-[760px]">
+            <div className="border-border bg-muted/40 text-muted-foreground grid grid-cols-9 border-y px-4 py-3 text-xs font-medium uppercase tracking-wider md:px-6">
               <div className="col-span-3 flex items-center">
-                <div className="flex flex-col gap-1">
-                  <p className="text-foreground text-sm">{user.email}</p>
-                  <p className="text-foreground text-sm">{user.username}</p>
-                </div>
+                <p>Email / Username</p>
               </div>
               <div className="col-span-2 flex items-center">
-                <p className="text-foreground text-sm">
-                  {user.subscriptionStatus}
-                </p>
+                <p>Subscription Status</p>
               </div>
               <div className="col-span-2 flex items-center">
-                <p className="text-muted-foreground text-sm">
-                  {user.paymentProcessorUserId}
-                </p>
+                <p>Stripe ID</p>
               </div>
               <div className="col-span-1 flex items-center">
-                <div className="text-foreground text-sm">
-                  <AdminSwitch {...user} />
-                </div>
+                <p>Is Admin</p>
               </div>
               <div className="col-span-1 flex items-center">
-                <DropdownEditDelete />
+                <p></p>
               </div>
             </div>
-          ))}
+            {isLoading && <LoadingSpinner />}
+            {!!data?.users &&
+              data?.users?.length > 0 &&
+              data.users.map((user) => (
+                <div
+                  key={user.id}
+                  className="border-border hover:bg-muted/30 grid grid-cols-9 gap-4 border-b px-4 py-4 transition-colors last:border-b-0 md:px-6"
+                >
+                  <div className="col-span-3 flex items-center">
+                    <div className="flex flex-col gap-1">
+                      <p className="text-foreground text-sm">{user.email}</p>
+                      <p className="text-foreground text-sm">{user.username}</p>
+                    </div>
+                  </div>
+                  <div className="col-span-2 flex items-center">
+                    <p className="text-foreground text-sm">
+                      {user.subscriptionStatus}
+                    </p>
+                  </div>
+                  <div className="col-span-2 flex items-center">
+                    <p className="text-muted-foreground text-sm">
+                      {user.paymentProcessorUserId}
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center">
+                    <div className="text-foreground text-sm">
+                      <AdminSwitch {...user} />
+                    </div>
+                  </div>
+                  <div className="col-span-1 flex items-center">
+                    <DropdownEditDelete />
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -6,25 +6,25 @@ export function SourcesTable({
   sources: PageViewSource[] | undefined;
 }) {
   return (
-    <div className="border-border bg-card shadow-default sm:px-7.5 rounded-sm border px-5 pb-2.5 pt-6 xl:pb-1">
-      <h4 className="text-foreground mb-6 text-xl font-semibold">
+    <div className="border-border bg-card rounded-lg border p-5 shadow-xs sm:p-6">
+      <h4 className="text-foreground mb-4 text-base font-semibold">
         Top Sources
       </h4>
 
       <div className="flex flex-col">
-        <div className="bg-gray-2 grid grid-cols-3 rounded-sm">
-          <div className="p-2.5 xl:p-5">
-            <h5 className="xsm:text-base text-sm font-medium uppercase">
+        <div className="bg-muted/60 grid grid-cols-3 rounded-md">
+          <div className="px-3 py-3">
+            <h5 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
               Source
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="xsm:text-base text-sm font-medium uppercase">
+            <h5 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
               Visitors
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="xsm:text-base text-sm font-medium uppercase">
+            <h5 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
               Sales
             </h5>
           </div>
@@ -34,24 +34,30 @@ export function SourcesTable({
           sources.map((source) => (
             <div
               key={source.name}
-              className="border-border grid grid-cols-3 border-b"
+              className="border-border grid grid-cols-3 border-b last:border-b-0"
             >
-              <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                <p className="text-foreground">{source.name}</p>
+              <div className="flex items-center gap-3 px-3 py-3">
+                <p className="text-foreground text-sm tabular-nums">
+                  {source.name}
+                </p>
               </div>
 
-              <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-foreground">{source.visitors}</p>
+              <div className="flex items-center justify-center px-3 py-3">
+                <p className="text-foreground text-sm tabular-nums">
+                  {source.visitors}
+                </p>
               </div>
 
               <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                <p className="text-foreground">--</p>
+                <p className="text-foreground text-sm tabular-nums">--</p>
               </div>
             </div>
           ))
         ) : (
-          <div className="flex items-center justify-center p-2.5 xl:p-5">
-            <p className="text-foreground">No data to display</p>
+          <div className="flex items-center justify-center px-3 py-3">
+            <p className="text-foreground text-sm tabular-nums">
+              No data to display
+            </p>
           </div>
         )}
       </div>

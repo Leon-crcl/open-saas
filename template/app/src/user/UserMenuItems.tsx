@@ -4,6 +4,9 @@ import { Link as WaspRouterLink } from "wasp/client/router";
 import { type User } from "wasp/entities";
 import { userMenuItems } from "./constants";
 
+const itemClassName =
+  "text-foreground hover:bg-accent flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors";
+
 export function UserMenuItems({
   user,
   onItemClick,
@@ -22,9 +25,9 @@ export function UserMenuItems({
             <WaspRouterLink
               to={item.to}
               onClick={onItemClick}
-              className="text-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium leading-7 transition-colors"
+              className={itemClassName}
             >
-              <item.icon size="1.1rem" />
+              <item.icon className="text-muted-foreground size-4" />
               {item.name}
             </WaspRouterLink>
           </li>
@@ -32,14 +35,15 @@ export function UserMenuItems({
       })}
       <li>
         <button
+          type="button"
           onClick={() => {
             logout();
             onItemClick?.();
           }}
-          className="text-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium leading-7 transition-colors"
+          className={itemClassName}
         >
-          <LogOut size="1.1rem" />
-          Log Out
+          <LogOut className="text-muted-foreground size-4" />
+          Log out
         </button>
       </li>
     </>

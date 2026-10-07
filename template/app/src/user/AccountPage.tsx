@@ -1,100 +1,107 @@
-import { getCustomerPortalUrl, useQuery } from "wasp/client/operations";
+import {
+  getCustomerPortalUrl,
+  getSupplierWorkspace,
+  useQuery,
+} from "wasp/client/operations";
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
 import type { User } from "wasp/entities";
+import { Truck } from "lucide-react";
+import { PageHeader } from "../client/components/layout/PageHeader";
+import { Badge } from "../client/components/ui/badge";
 import { Button } from "../client/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "../client/components/ui/card";
-import { Separator } from "../client/components/ui/separator";
 import {
   PaymentPlanId,
   SubscriptionStatus,
   parsePaymentPlanId,
   prettyPaymentPlanName,
 } from "../payment/plans";
+import {
+  MAX_SUPPLIER_LIMIT,
+  getSupplierLimit,
+} from "../supplier-analyzer/limits";
+import { UserAvatar, getUserDisplayName } from "./UserDropdown";
 
 export function AccountPage({ user }: { user: User }) {
   return (
-    <div className="mt-10 px-6">
-      <Card className="mb-4 lg:m-8">
+    <div className="space-y-8">
+      <PageHeader
+        title="Account"
+        description="Manage your profile and plan."
+      />
+
+      <Card>
         <CardHeader>
-          <CardTitle className="text-foreground text-base font-semibold leading-6">
-            Account Information
-          </CardTitle>
+          <CardTitle className="text-base">Profile</CardTitle>
+          <CardDescription>How you appear in the app.</CardDescription>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="space-y-0">
-            {!!user.email && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
-                  <div className="text-muted-foreground text-sm font-medium">
-                    Email address
-                  </div>
-                  <div className="text-foreground mt-1 text-sm sm:col-span-2 sm:mt-0">
-                    {user.email}
-                  </div>
-                </div>
-              </div>
-            )}
-            {!!user.username && (
-              <>
-                <Separator />
-                <div className="px-6 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
-                    <div className="text-muted-foreground text-sm font-medium">
-                      Username
-                    </div>
-                    <div className="text-foreground mt-1 text-sm sm:col-span-2 sm:mt-0">
-                      {user.username}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-            <Separator />
-            <div className="px-6 py-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
-                <div className="text-muted-foreground text-sm font-medium">
-                  Your Plan
-                </div>
-                <UserCurrentSubscriptionPlan
-                  subscriptionPlan={user.subscriptionPlan}
-                  subscriptionStatus={user.subscriptionStatus}
-                  datePaid={user.datePaid}
-                />
-              </div>
-            </div>
-            <Separator />
-            <div className="px-6 py-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
-                <div className="text-muted-foreground text-sm font-medium">
-                  Credits
-                </div>
-                <div className="text-foreground mt-1 text-sm sm:col-span-1 sm:mt-0">
-                  {user.credits} credits
-                </div>
-                <div className="ml-auto mt-4 sm:mt-0">
-                  <BuyMoreButton subscriptionStatus={user.subscriptionStatus} />
-                </div>
-              </div>
-            </div>
-            <Separator />
-            <div className="px-6 py-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
-                <div className="text-muted-foreground text-sm font-medium">
-                  About
-                </div>
-                <div className="text-foreground mt-1 text-sm sm:col-span-2 sm:mt-0">
-                  I'm a cool customer.
-                </div>
-              </div>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <UserAvatar user={user} className="size-12 text-base" />
+            <div className="min-w-0">
+              <p className="text-foreground truncate text-sm font-medium">
+                {getUserDisplayName(user)}
+              </p>
+              {!!user.email && user.email !== getUserDisplayName(user) && (
+                <p className="text-muted-foreground truncate text-sm">
+                  {user.email}
+                </p>
+              )}
             </div>
           </div>
+          <dl className="divide-border mt-6 divide-y border-t">
+            {!!user.email && (
+              <AccountRow label="Email address">{user.email}</AccountRow>
+            )}
+            {!!user.username && (
+              <AccountRow label="Username">{user.username}</AccountRow>
+            )}
+          </dl>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Plan &amp; billing</CardTitle>
+          <CardDescription>
+            Your current subscription and payment details.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <dl className="divide-border divide-y border-t">
+            <UserCurrentSubscriptionPlan
+              subscriptionPlan={user.subscriptionPlan}
+              subscriptionStatus={user.subscriptionStatus}
+              datePaid={user.datePaid}
+            />
+            <SupplierUsageRow user={user} />
+          </dl>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function AccountRow({
+  label,
+  children,
+  action,
+}: {
+  label: string;
+  children: React.ReactNode;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1 py-4 sm:grid sm:grid-cols-[180px_1fr_auto] sm:items-center sm:gap-4">
+      <dt className="text-muted-foreground text-sm font-medium">{label}</dt>
+      <dd className="text-foreground text-sm">{children}</dd>
+      {action && <div className="mt-2 sm:mt-0">{action}</div>}
     </div>
   );
 }
@@ -117,15 +124,20 @@ function UserCurrentSubscriptionPlan({
     );
   }
 
+  const isPaidPlan = subscriptionPlanMessage !== "Free Plan";
+
   return (
-    <>
-      <div className="text-foreground mt-1 text-sm sm:col-span-1 sm:mt-0">
+    <AccountRow label="Your plan" action={<CustomerPortalButton />}>
+      <span className="inline-flex flex-wrap items-center gap-2">
         {subscriptionPlanMessage}
-      </div>
-      <div className="ml-auto mt-4 sm:mt-0">
-        <CustomerPortalButton />
-      </div>
-    </>
+        {isPaidPlan && subscriptionStatus === SubscriptionStatus.Active && (
+          <Badge variant="success">Active</Badge>
+        )}
+        {subscriptionStatus === SubscriptionStatus.PastDue && (
+          <Badge variant="destructive">Past due</Badge>
+        )}
+      </span>
+    </AccountRow>
   );
 }
 
@@ -176,30 +188,42 @@ function CustomerPortalButton() {
   }
 
   return (
-    <a href={customerPortalUrl} target="_blank" rel="noopener noreferrer">
-      <Button disabled={isCustomerPortalUrlLoading} variant="link">
-        Manage Payment Details
-      </Button>
-    </a>
+    <Button
+      asChild
+      variant="outline"
+      size="sm"
+      disabled={isCustomerPortalUrlLoading}
+    >
+      <a href={customerPortalUrl} target="_blank" rel="noopener noreferrer">
+        Manage payment details
+      </a>
+    </Button>
   );
 }
 
-function BuyMoreButton({
-  subscriptionStatus,
-}: Pick<User, "subscriptionStatus">) {
-  if (
-    subscriptionStatus === SubscriptionStatus.Active ||
-    subscriptionStatus === SubscriptionStatus.CancelAtPeriodEnd
-  ) {
-    return null;
-  }
+function SupplierUsageRow({ user }: { user: User }) {
+  const { data: workspace } = useQuery(getSupplierWorkspace);
+  const limit = getSupplierLimit(user);
+  const canUpgrade = limit < MAX_SUPPLIER_LIMIT;
 
   return (
-    <WaspRouterLink
-      to={routes.PricingPageRoute.to}
-      className="text-primary hover:text-primary/80 text-sm font-medium transition-colors duration-200"
+    <AccountRow
+      label="Suppliers"
+      action={canUpgrade ? <UpgradeButton /> : null}
     >
-      <Button variant="link">Buy More Credits</Button>
-    </WaspRouterLink>
+      <span className="inline-flex items-center gap-2">
+        <Truck className="text-muted-foreground size-4" aria-hidden="true" />
+        {workspace ? workspace.suppliers.length : "–"} of{" "}
+        {limit} used
+      </span>
+    </AccountRow>
+  );
+}
+
+function UpgradeButton() {
+  return (
+    <Button asChild variant="outline" size="sm">
+      <WaspRouterLink to={routes.PricingPageRoute.to}>Upgrade plan</WaspRouterLink>
+    </Button>
   );
 }
